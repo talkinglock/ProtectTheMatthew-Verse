@@ -1,0 +1,345 @@
+[gd_scene format=4 uid="uid://davvjpxqvvjxi"]
+
+[ext_resource type="Script" uid="uid://8uai7w6ut78s" path="res://scene/PlayerController.cs" id="1_xo3ru"]
+[ext_resource type="Script" uid="uid://cuodjjiuj5ry2" path="res://scene/scripts/CameraManager.cs" id="2_ct4mp"]
+[ext_resource type="PackedScene" uid="uid://k86aoimc06ce" path="res://skybox.tscn" id="2_hjaqi"]
+[ext_resource type="PackedScene" uid="uid://r8wgkra1pgcq" path="res://scene/ui.tscn" id="3_fvtld"]
+[ext_resource type="AudioStream" uid="uid://2ig211rwg8h7" path="res://scene/res/audio/Zombie Tsunami Official Soundtrack - In Game.mp3" id="3_oh5ij"]
+[ext_resource type="AudioStream" uid="uid://bcoq46vmyxaaj" path="res://scene/res/audio/shoot.mp3" id="3_s4jxa"]
+[ext_resource type="AudioStream" uid="uid://cv5qu5rc70o6k" path="res://scene/res/audio/enemyDeath.mp3" id="6_hp4bs"]
+[ext_resource type="AudioStream" uid="uid://ct8enayp5di3b" path="res://scene/res/audio/shotgun-sound-effect-pumping.mp3" id="7_g2vtq"]
+
+[sub_resource type="PrismMesh" id="PrismMesh_hjaqi"]
+
+[sub_resource type="Curve" id="Curve_fvtld"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.5768025, 0.518216), -1.0321295, -1.0321295, 0, 0, Vector2(1, 0.011934638), -1.4253218, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_s4jxa"]
+curve = SubResource("Curve_fvtld")
+
+[sub_resource type="Gradient" id="Gradient_s4jxa"]
+colors = PackedColorArray(1, 1, 1, 1, 0.2041653, 0.20416531, 0.2041653, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_oh5ij"]
+gradient = SubResource("Gradient_s4jxa")
+
+[sub_resource type="Curve" id="Curve_2fvbb"]
+_data = [Vector2(0, 1), 0.0, 0.22263832, 0, 0, Vector2(1, 0.8876405), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_hp4bs"]
+curve = SubResource("Curve_2fvbb")
+
+[sub_resource type="Curve" id="Curve_ihjo1"]
+_data = [Vector2(0, 0.19101131), 0.0, 0.0, 0, 0, Vector2(0.11504425, 0.1460675), -0.33857673, -0.33857673, 0, 0, Vector2(0.3362832, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_g2vtq"]
+curve = SubResource("Curve_ihjo1")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_fvtld"]
+lifetime_randomness = 0.09
+emission_shape = 3
+emission_box_extents = Vector3(0.2, 0.2, 0.2)
+inherit_velocity_ratio = 1.0
+direction = Vector3(0, 1, 0)
+spread = 2.0
+initial_velocity_max = 120.0
+gravity = Vector3(0, 0, 0)
+scale_curve = SubResource("CurveTexture_g2vtq")
+color = Color(0.9356713, 0.6211192, 0, 1)
+color_initial_ramp = SubResource("GradientTexture1D_oh5ij")
+alpha_curve = SubResource("CurveTexture_s4jxa")
+emission_curve = SubResource("CurveTexture_hp4bs")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2fvbb"]
+transparency = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+vertex_color_is_srgb = true
+
+[sub_resource type="BoxMesh" id="BoxMesh_ct4mp"]
+material = SubResource("StandardMaterial3D_2fvbb")
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_hp4bs"]
+margin = 0.0
+radius = 4.691
+
+[sub_resource type="Curve" id="Curve_hp4bs"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.37299037, 0.12435222), 0.0, 0.0, 0, 0, Vector2(0.63987136, 0.048575044), -0.5747977, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="CurveTexture" id="CurveTexture_2fvbb"]
+curve = SubResource("Curve_hp4bs")
+
+[sub_resource type="Gradient" id="Gradient_ml7e8"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 0, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_ihjo1"]
+gradient = SubResource("Gradient_ml7e8")
+
+[sub_resource type="Gradient" id="Gradient_dk1vr"]
+offsets = PackedFloat32Array(0, 0.25339368)
+colors = PackedColorArray(1, 1, 1, 1, 2.7998097, 0, 0.1757453, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_34jf3"]
+gradient = SubResource("Gradient_dk1vr")
+
+[sub_resource type="Curve" id="Curve_u7b46"]
+_data = [Vector2(0, 0.518216), 0.0, 0.0, 0, 0, Vector2(0.27272728, 0.44472355), 0.056628305, 0.056628305, 0, 0, Vector2(0.55799377, 0.29773867), -0.84483284, -0.84483284, 0, 0, Vector2(0.83385575, 0), 0.07561424, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="CurveTexture" id="CurveTexture_j4wxg"]
+curve = SubResource("Curve_u7b46")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_bup7g"]
+particle_flag_align_y = true
+direction = Vector3(0, 1, 0)
+spread = 35.83
+initial_velocity_min = 35.0
+initial_velocity_max = 35.0
+gravity = Vector3(0, 0, 0)
+scale_curve = SubResource("CurveTexture_j4wxg")
+color = Color(0.9474345, 0.2738464, 0, 1)
+color_ramp = SubResource("GradientTexture1D_34jf3")
+color_initial_ramp = SubResource("GradientTexture1D_ihjo1")
+alpha_curve = SubResource("CurveTexture_2fvbb")
+hue_variation_min = 0.059999976
+hue_variation_max = 0.15999997
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hp4bs"]
+shading_mode = 0
+vertex_color_use_as_albedo = true
+vertex_color_is_srgb = true
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_6l7ap"]
+_surfaces = [{
+"aabb": AABB(-0.866025, -1, -1, 1.73205, 2, 1.5),
+"format": 34896613377,
+"index_count": 12,
+"index_data": PackedByteArray("AAABAAIAAgABAAMAAAADAAEAAAACAAMA"),
+"name": "Cone",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 4,
+"vertex_data": PackedByteArray("/38AAKqqAAD/f///AAAAAAAA/////wAA////////AAA=")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_g2vtq"]
+_surfaces = [{
+"aabb": AABB(-0.866025, -1, -1, 1.73205, 2, 1.5),
+"attribute_data": PackedByteArray("/z//v/8/joI0dbfeNPW33v+/joLKirfe/z//vzR1t97KCrfe/z//v8oKt97/P46C"),
+"format": 34896613399,
+"index_count": 12,
+"index_data": PackedByteArray("AAABAAIAAwAEAAUABgAHAAgACQAKAAsA"),
+"material": SubResource("StandardMaterial3D_hp4bs"),
+"name": "Cone",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 12,
+"vertex_data": PackedByteArray("/38AAKqqveb/f///AAC95gAA/////73mAAD/////AAD/f///AAAAAP///////wAA/38AAKqq//8AAP///////////////////38AAKqqveb///////+95v9///8AAL3mUcne1lHJ3tZRyd7W/3//v/9//7//f/+//3/4cf9/+HH/f/hxH6lSSR+pUkkfqVJJ")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_6l7ap")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_xo3ru"]
+size = Vector3(0.56691754, 4.5182676, 0.8336911)
+
+[sub_resource type="Curve" id="Curve_g2vtq"]
+_data = [Vector2(0.023364492, 1), 0.0, 0.0, 0, 0, Vector2(0.3598131, 0.3146068), 0.0, 0.0, 0, 0, Vector2(0.53738314, 0.1685394), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="CurveTexture" id="CurveTexture_f87vc"]
+curve = SubResource("Curve_g2vtq")
+
+[sub_resource type="Gradient" id="Gradient_2fvbb"]
+offsets = PackedFloat32Array(0, 0.9897959)
+colors = PackedColorArray(4.0059752, 2.5719352, 0.13048485, 1, 1.9348391, 0.36779404, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_b7koy"]
+gradient = SubResource("Gradient_2fvbb")
+
+[sub_resource type="Curve" id="Curve_ml7e8"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.20093459, 0.68539333), 0.0, 0.0, 0, 0, Vector2(0.4953271, 0.25842702), -1.0372331, -1.0372331, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="CurveTexture" id="CurveTexture_ulb22"]
+curve = SubResource("Curve_ml7e8")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_ihjo1"]
+particle_flag_align_y = true
+angle_min = 1.0728835e-05
+angle_max = 1.0728835e-05
+direction = Vector3(0, 1, 1)
+spread = 171.474
+initial_velocity_min = 10.0
+initial_velocity_max = 10.0
+gravity = Vector3(0, 0, 0)
+scale_curve = SubResource("CurveTexture_ulb22")
+color = Color(0.8787231, 0.46376452, 1.3269154e-06, 1)
+color_ramp = SubResource("GradientTexture1D_b7koy")
+alpha_curve = SubResource("CurveTexture_f87vc")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vgurf"]
+transparency = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+vertex_color_is_srgb = true
+
+[sub_resource type="PrismMesh" id="PrismMesh_dk1vr"]
+material = SubResource("StandardMaterial3D_vgurf")
+left_to_right = 0.0
+size = Vector3(0.25, 2, 0.25)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_hp4bs"]
+size = Vector3(1.7179108, 4.6011353, 0.97314453)
+
+[node name="Player" type="Node3D" unique_id=719301295 node_paths=PackedStringArray("PlayerObject", "CameraTransform", "UIController", "raycaster", "shoot", "deathVFX", "deathSFX", "shotgunSFX", "particle", "rigidBody", "skybox", "shotgunShapecast", "shotgunParticle", "cameraScript")]
+script = ExtResource("1_xo3ru")
+PlayerObject = NodePath("PlayerRigidbody/PlayerMoveable")
+combatFrequency = 0.1
+CameraTransform = NodePath("CameraTransform")
+UIController = NodePath("UI")
+s_OFFSET = Vector3(0, 7, 0)
+invulnerabilityPeriod = 2
+raycaster = NodePath("PlayerRigidbody/PlayerMoveable/RayCast3D")
+shoot = NodePath("PlayerRigidbody/PlayerMoveable/ShootSound")
+deathVFX = NodePath("PlayerRigidbody/Explosion")
+deathSFX = NodePath("PlayerRigidbody/AudioStreamPlayer3D")
+shotgunSFX = NodePath("PlayerRigidbody/ShotgunSound")
+TileSize = 200.0
+AccelerationMultiplier = 70.0
+MaxSpeed = 40.0
+particle = NodePath("PlayerRigidbody/PlayerMoveable/Shoot")
+FRICTION = 0.95
+rigidBody = NodePath("PlayerRigidbody")
+skybox = NodePath("PlayerRigidbody/Skybox")
+SKYBOXSPEED = 1000.0
+shotgunReloadTime = 2.0
+shotgunShapecast = NodePath("PlayerRigidbody/PlayerMoveable/ShotgunCast")
+shotgunParticle = NodePath("PlayerRigidbody/PlayerMoveable/ShutgunVFX")
+cameraScript = NodePath("PlayerCam")
+
+[node name="PlayerCam" type="Camera3D" parent="." unique_id=1247003932 node_paths=PackedStringArray("cameraTransform")]
+transform = Transform3D(-1, 8.7302965e-08, -4.575356e-09, 0, 0.052335974, 0.9986295, 8.742278e-08, 0.9986295, -0.052335974, 0, 1.0078824, 0)
+fov = 98.3
+script = ExtResource("2_ct4mp")
+cameraTransform = NodePath("../CameraTransform")
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="PlayerCam" unique_id=1982991091]
+stream = ExtResource("3_oh5ij")
+attenuation_model = 3
+volume_db = -2.0
+unit_size = 100.0
+autoplay = true
+max_distance = 115.45
+parameters/looping = true
+
+[node name="PlayerRigidbody" type="RigidBody3D" parent="." unique_id=1819777254]
+axis_lock_angular_x = true
+axis_lock_angular_y = true
+axis_lock_angular_z = true
+gravity_scale = 0.0
+
+[node name="PlayerMoveable" type="MeshInstance3D" parent="PlayerRigidbody" unique_id=1466528755]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -0.46490553, 0, 1, -2.0321666e-08, 0, 0, 0)
+mesh = SubResource("PrismMesh_hjaqi")
+
+[node name="RayCast3D" type="RayCast3D" parent="PlayerRigidbody/PlayerMoveable" unique_id=1524520500]
+transform = Transform3D(0.9999998, 0, 0, 0, 0.9999998, 0, 0, 7.1054274e-15, 0.9999998, 0, 0.56929994, -5.3526787e-08)
+target_position = Vector3(0, 50, 0)
+collision_mask = 2
+collide_with_areas = true
+collide_with_bodies = false
+
+[node name="Shoot" type="GPUParticles3D" parent="PlayerRigidbody/PlayerMoveable" unique_id=295065108]
+transform = Transform3D(0.9999998, 0, 0, 0, 0.9999998, 0, 0, 7.1054274e-15, 0.9999998, 0, 0.9118972, -8.573849e-08)
+emitting = false
+amount = 40
+lifetime = 0.3
+explosiveness = 0.9
+randomness = 0.44
+fixed_fps = 80
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_fvtld")
+draw_pass_1 = SubResource("BoxMesh_ct4mp")
+
+[node name="ShootSound" type="AudioStreamPlayer3D" parent="PlayerRigidbody/PlayerMoveable" unique_id=255578539]
+transform = Transform3D(0.99999994, 0, 0, 0, -4.3711385e-08, 0.99999994, 0, -2.1509745, -9.4022084e-08, 0, 0, 0)
+stream = ExtResource("3_s4jxa")
+volume_db = -9.734
+unit_size = 10.94
+parameters/looping = true
+
+[node name="ShotgunCast" type="ShapeCast3D" parent="PlayerRigidbody/PlayerMoveable" unique_id=1532814816]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 3.2889442, -3.0923349e-07)
+shape = SubResource("SphereShape3D_hp4bs")
+target_position = Vector3(0, 0, 1)
+collision_mask = 2
+collide_with_areas = true
+collide_with_bodies = false
+debug_shape_custom_color = Color(0, 0, 1, 1)
+
+[node name="ShutgunVFX" type="GPUParticles3D" parent="PlayerRigidbody/PlayerMoveable" unique_id=1786957990]
+emitting = false
+amount = 120
+lifetime = 0.73
+one_shot = true
+explosiveness = 0.85
+randomness = 0.65
+fixed_fps = 70
+process_material = SubResource("ParticleProcessMaterial_bup7g")
+draw_pass_1 = SubResource("ArrayMesh_g2vtq")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PlayerRigidbody" unique_id=814760578]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.03308274, 0.17040539, -0.04167366)
+shape = SubResource("BoxShape3D_xo3ru")
+
+[node name="Explosion" type="GPUParticles3D" parent="PlayerRigidbody" unique_id=1851487634]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0)
+emitting = false
+amount = 150
+lifetime = 5.0
+one_shot = true
+explosiveness = 0.8
+randomness = 0.65
+fixed_fps = 60
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_ihjo1")
+draw_pass_1 = SubResource("PrismMesh_dk1vr")
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="PlayerRigidbody" unique_id=1812214238]
+stream = ExtResource("6_hp4bs")
+unit_size = 24.94
+pitch_scale = 1.71
+
+[node name="Skybox" parent="PlayerRigidbody" unique_id=558973740 instance=ExtResource("2_hjaqi")]
+transform = Transform3D(1.0025858, 0, 0, 0, 1.0025858, 7.1054274e-15, 0, 0, 1.0025858, -0.023111818, 0.012778282, -0.0025310514)
+
+[node name="GPUParticlesAttractorSphere3D" type="GPUParticlesAttractorSphere3D" parent="PlayerRigidbody" unique_id=242733142]
+layers = 2
+strength = 68.0
+attenuation = 1.8536307
+cull_mask = 4293918722
+radius = 59.52
+
+[node name="PlayerRaycastCollider" type="Area3D" parent="PlayerRigidbody" unique_id=357492621]
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PlayerRigidbody/PlayerRaycastCollider" unique_id=1800210965]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0022201538, -0.54849243, 0.013427734)
+shape = SubResource("BoxShape3D_hp4bs")
+
+[node name="ShotgunSound" type="AudioStreamPlayer3D" parent="PlayerRigidbody" unique_id=1668007572]
+stream = ExtResource("7_g2vtq")
+attenuation_model = 3
+volume_db = 3.187
+unit_size = 36.14
+max_db = 3.025
+
+[node name="UI" parent="." unique_id=2063569886 instance=ExtResource("3_fvtld")]
+
+[node name="CameraTransform" type="Node3D" parent="." unique_id=1324603691]

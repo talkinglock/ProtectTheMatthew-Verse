@@ -1,0 +1,30 @@
+[gd_scene format=3 uid="uid://r8wgkra1pgcq"]
+
+[ext_resource type="Script" uid="uid://dy7mbu2oqntig" path="res://scene/scripts/Controller.cs" id="1_onfsl"]
+
+[node name="UI" type="Control" unique_id=2063569886]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_onfsl")
+
+[node name="TextEdit" type="TextEdit" parent="." unique_id=1745817953]
+layout_mode = 0
+offset_left = 9.0
+offset_top = 13.0
+offset_right = 137.0
+offset_bottom = 58.0
+text = "Score: "
+editable = false
+
+[node name="Health" type="TextEdit" parent="." unique_id=1500651769]
+layout_mode = 0
+offset_left = 155.0
+offset_top = 13.0
+offset_right = 283.0
+offset_bottom = 58.0
+text = "Health:"
+editable = false

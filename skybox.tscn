@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://k86aoimc06ce"]
+
+[ext_resource type="Script" uid="uid://dmuxojw6ksulp" path="res://Skybox.cs" id="1_mua6v"]
+[ext_resource type="Shader" uid="uid://dw5su8j37x7e0" path="res://skybox.gdshader" id="1_si1ts"]
+[ext_resource type="Script" uid="uid://bpbarsv5lud0e" path="res://ShaderHandler.cs" id="3_bob2p"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mua6v"]
+render_priority = 0
+shader = ExtResource("1_si1ts")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_bob2p"]
+
+[node name="Skybox" type="Node3D" unique_id=558973740 node_paths=PackedStringArray("shader")]
+script = ExtResource("1_mua6v")
+shader = NodePath("MeshInstance3D")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=792144608]
+physics_interpolation_mode = 2
+transform = Transform3D(100, 0, 0, 0, 1.429, 0, 0, 0, 100, 0, -20, 0)
+material_override = SubResource("ShaderMaterial_mua6v")
+mesh = SubResource("PlaneMesh_bob2p")
+script = ExtResource("3_bob2p")

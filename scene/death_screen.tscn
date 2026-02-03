@@ -1,0 +1,31 @@
+[gd_scene format=3 uid="uid://b75y8dafrtm6a"]
+
+[ext_resource type="Texture2D" uid="uid://dgu7ybnnlvfg" path="res://scene/res/images/image.png" id="1_4gfsm"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_hvnne"]
+
+[node name="DeathScreen" type="Control" unique_id=959608043]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=505512929]
+modulate = Color(0.81263477, 0.81263477, 0.81263477, 0.47843137)
+material = SubResource("CanvasItemMaterial_hvnne")
+layout_mode = 0
+offset_top = -44.0
+offset_right = 1153.0
+offset_bottom = 705.0
+texture = ExtResource("1_4gfsm")
+
+[node name="LineEdit" type="LineEdit" parent="." unique_id=77866515]
+layout_mode = 0
+offset_left = 536.0
+offset_top = 119.0
+offset_right = 679.0
+offset_bottom = 196.0
+text = "you're dead idiot"

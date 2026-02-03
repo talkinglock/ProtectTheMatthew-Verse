@@ -1,0 +1,48 @@
+[gd_scene format=3 uid="uid://bv0akotbkktvk"]
+
+[ext_resource type="Script" uid="uid://bji2iiq1uv58k" path="res://scene/Level.cs" id="1_7g0b6"]
+[ext_resource type="PackedScene" uid="uid://davvjpxqvvjxi" path="res://scene/player.tscn" id="1_dmi07"]
+[ext_resource type="PackedScene" uid="uid://co0m5xvpp7a0u" path="res://scene/enemy.tscn" id="2_7g0b6"]
+[ext_resource type="PackedScene" uid="uid://b75y8dafrtm6a" path="res://scene/death_screen.tscn" id="3_ukt71"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ismto"]
+sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+ground_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+
+[sub_resource type="Sky" id="Sky_33cqm"]
+sky_material = SubResource("ProceduralSkyMaterial_ismto")
+
+[sub_resource type="Environment" id="Environment_bddx0"]
+background_mode = 2
+sky = SubResource("Sky_33cqm")
+tonemap_mode = 2
+glow_enabled = true
+
+[node name="Level" type="Node3D" unique_id=1887709617 node_paths=PackedStringArray("playerNode", "enemyTemplate", "enemiesFolder")]
+script = ExtResource("1_7g0b6")
+playerNode = NodePath("Player")
+enemyTemplate = NodePath("enemy")
+enemiesFolder = NodePath("Enemies")
+spawnRadiusLower = 15
+spawnRadiusUpper = 17
+EnemyMinimum = 8
+EnemySpawnAmount = 7
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=391491991]
+environment = SubResource("Environment_bddx0")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=748071427]
+transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 0, 0)
+shadow_enabled = true
+
+[node name="Player" parent="." unique_id=719301295 node_paths=PackedStringArray("deathScreen") instance=ExtResource("1_dmi07")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.32735205, 0)
+deathScreen = NodePath("../DeathScreen")
+
+[node name="enemy" parent="." unique_id=1079522994 node_paths=PackedStringArray("player") instance=ExtResource("2_7g0b6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.437563, 171.29868, -25.930618)
+player = NodePath("../Player")
+
+[node name="DeathScreen" parent="." unique_id=959608043 instance=ExtResource("3_ukt71")]
+
+[node name="Enemies" type="Node3D" parent="." unique_id=1942915605]

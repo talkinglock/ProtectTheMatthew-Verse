@@ -1,0 +1,40 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[application]
+
+config/name="Protect the Matthewverse"
+config/description="Protect the Matthewverse from those who wish to diet"
+run/main_scene="uid://j7fj0vmd2f1p"
+config/features=PackedStringArray("4.6", "C#", "Forward Plus")
+boot_splash/image="uid://dgu7ybnnlvfg"
+config/icon="uid://c4sum7k023x3n"
+
+[autoload]
+
+Main="*uid://dn4r1v2yyqgvm"
+
+[display]
+
+window/size/borderless=true
+mouse_cursor/custom_image="uid://doo2sfipw574l"
+
+[dotnet]
+
+project/assembly_name="Food"
+
+[physics]
+
+3d/physics_engine="Jolt Physics"
+3d/default_gravity=0.0
+
+[rendering]
+
+rendering_device/driver.windows="d3d12"
