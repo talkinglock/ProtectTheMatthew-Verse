@@ -1,4 +1,4 @@
-##PROTECT THE MATTHEWVERSE##
+##PROTECT THE MATTHEWVERSE
 
 <img width="1191" height="682" alt="image" src="https://github.com/user-attachments/assets/22e4e0fc-c268-4ec8-b841-2aba160510dd" />
 
