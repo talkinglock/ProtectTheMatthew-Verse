@@ -1,13 +1,13 @@
 [gd_scene format=4 uid="uid://davvjpxqvvjxi"]
 
-[ext_resource type="Script" uid="uid://8uai7w6ut78s" path="res://scene/PlayerController.cs" id="1_xo3ru"]
-[ext_resource type="Script" uid="uid://cuodjjiuj5ry2" path="res://scene/scripts/CameraManager.cs" id="2_ct4mp"]
-[ext_resource type="PackedScene" uid="uid://k86aoimc06ce" path="res://skybox.tscn" id="2_hjaqi"]
+[ext_resource type="Script" uid="uid://8uai7w6ut78s" path="res://scripts/PlayerController.cs" id="1_xo3ru"]
+[ext_resource type="Script" uid="uid://cuodjjiuj5ry2" path="res://scripts/CameraManager.cs" id="2_ct4mp"]
+[ext_resource type="PackedScene" uid="uid://k86aoimc06ce" path="res://scene/skybox.tscn" id="2_hjaqi"]
 [ext_resource type="PackedScene" uid="uid://r8wgkra1pgcq" path="res://scene/ui.tscn" id="3_fvtld"]
-[ext_resource type="AudioStream" uid="uid://2ig211rwg8h7" path="res://scene/res/audio/Zombie Tsunami Official Soundtrack - In Game.mp3" id="3_oh5ij"]
-[ext_resource type="AudioStream" uid="uid://bcoq46vmyxaaj" path="res://scene/res/audio/shoot.mp3" id="3_s4jxa"]
-[ext_resource type="AudioStream" uid="uid://cv5qu5rc70o6k" path="res://scene/res/audio/enemyDeath.mp3" id="6_hp4bs"]
-[ext_resource type="AudioStream" uid="uid://ct8enayp5di3b" path="res://scene/res/audio/shotgun-sound-effect-pumping.mp3" id="7_g2vtq"]
+[ext_resource type="AudioStream" uid="uid://2ig211rwg8h7" path="res://res/audio/Zombie Tsunami Official Soundtrack - In Game.mp3" id="3_oh5ij"]
+[ext_resource type="AudioStream" uid="uid://bcoq46vmyxaaj" path="res://res/audio/shoot.mp3" id="3_s4jxa"]
+[ext_resource type="AudioStream" uid="uid://cv5qu5rc70o6k" path="res://res/audio/enemyDeath.mp3" id="6_hp4bs"]
+[ext_resource type="AudioStream" uid="uid://ct8enayp5di3b" path="res://res/audio/shotgun-sound-effect-pumping.mp3" id="7_g2vtq"]
 
 [sub_resource type="PrismMesh" id="PrismMesh_hjaqi"]
 
@@ -61,10 +61,6 @@ vertex_color_is_srgb = true
 
 [sub_resource type="BoxMesh" id="BoxMesh_ct4mp"]
 material = SubResource("StandardMaterial3D_2fvbb")
-
-[sub_resource type="SphereShape3D" id="SphereShape3D_hp4bs"]
-margin = 0.0
-radius = 4.691
 
 [sub_resource type="Curve" id="Curve_hp4bs"]
 _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.37299037, 0.12435222), 0.0, 0.0, 0, 0, Vector2(0.63987136, 0.048575044), -0.5747977, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
@@ -144,6 +140,9 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_6l7ap")
 
+[sub_resource type="SphereShape3D" id="SphereShape3D_g2vtq"]
+radius = 4.625
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_xo3ru"]
 size = Vector3(0.56691754, 4.5182676, 0.8336911)
 
@@ -199,7 +198,6 @@ size = Vector3(1.7179108, 4.6011353, 0.97314453)
 [node name="Player" type="Node3D" unique_id=719301295 node_paths=PackedStringArray("PlayerObject", "CameraTransform", "UIController", "raycaster", "shoot", "deathVFX", "deathSFX", "shotgunSFX", "particle", "rigidBody", "skybox", "shotgunShapecast", "shotgunParticle", "cameraScript")]
 script = ExtResource("1_xo3ru")
 PlayerObject = NodePath("PlayerRigidbody/PlayerMoveable")
-combatFrequency = 0.1
 CameraTransform = NodePath("CameraTransform")
 UIController = NodePath("UI")
 s_OFFSET = Vector3(0, 7, 0)
@@ -207,18 +205,16 @@ invulnerabilityPeriod = 2
 raycaster = NodePath("PlayerRigidbody/PlayerMoveable/RayCast3D")
 shoot = NodePath("PlayerRigidbody/PlayerMoveable/ShootSound")
 deathVFX = NodePath("PlayerRigidbody/Explosion")
-deathSFX = NodePath("PlayerRigidbody/AudioStreamPlayer3D")
+deathSFX = NodePath("PlayerRigidbody/Death")
 shotgunSFX = NodePath("PlayerRigidbody/ShotgunSound")
-TileSize = 200.0
-AccelerationMultiplier = 70.0
-MaxSpeed = 40.0
+AccelerationMultiplier = 10.0
+MaxSpeed = 30.0
 particle = NodePath("PlayerRigidbody/PlayerMoveable/Shoot")
-FRICTION = 0.95
 rigidBody = NodePath("PlayerRigidbody")
 skybox = NodePath("PlayerRigidbody/Skybox")
-SKYBOXSPEED = 1000.0
+SKYBOXSPEED = 300.0
 shotgunReloadTime = 2.0
-shotgunShapecast = NodePath("PlayerRigidbody/PlayerMoveable/ShotgunCast")
+shotgunShapecast = NodePath("PlayerRigidbody/PlayerMoveable/ShotgunShapecast")
 shotgunParticle = NodePath("PlayerRigidbody/PlayerMoveable/ShutgunVFX")
 cameraScript = NodePath("PlayerCam")
 
@@ -273,15 +269,6 @@ volume_db = -9.734
 unit_size = 10.94
 parameters/looping = true
 
-[node name="ShotgunCast" type="ShapeCast3D" parent="PlayerRigidbody/PlayerMoveable" unique_id=1532814816]
-transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 3.2889442, -3.0923349e-07)
-shape = SubResource("SphereShape3D_hp4bs")
-target_position = Vector3(0, 0, 1)
-collision_mask = 2
-collide_with_areas = true
-collide_with_bodies = false
-debug_shape_custom_color = Color(0, 0, 1, 1)
-
 [node name="ShutgunVFX" type="GPUParticles3D" parent="PlayerRigidbody/PlayerMoveable" unique_id=1786957990]
 emitting = false
 amount = 120
@@ -292,6 +279,14 @@ randomness = 0.65
 fixed_fps = 70
 process_material = SubResource("ParticleProcessMaterial_bup7g")
 draw_pass_1 = SubResource("ArrayMesh_g2vtq")
+
+[node name="ShotgunShapecast" type="ShapeCast3D" parent="PlayerRigidbody/PlayerMoveable" unique_id=1404668083]
+transform = Transform3D(0.99999964, 0, 0, 0, 0.99999964, -1.7763568e-15, 0, 0, 0.99999964, 0, 4.8958607, -4.6031914e-07)
+shape = SubResource("SphereShape3D_g2vtq")
+target_position = Vector3(0, 0, 0)
+collision_mask = 2
+collide_with_areas = true
+collide_with_bodies = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="PlayerRigidbody" unique_id=814760578]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.03308274, 0.17040539, -0.04167366)
@@ -310,7 +305,7 @@ local_coords = true
 process_material = SubResource("ParticleProcessMaterial_ihjo1")
 draw_pass_1 = SubResource("PrismMesh_dk1vr")
 
-[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="PlayerRigidbody" unique_id=1812214238]
+[node name="Death" type="AudioStreamPlayer3D" parent="PlayerRigidbody" unique_id=1812214238]
 stream = ExtResource("6_hp4bs")
 unit_size = 24.94
 pitch_scale = 1.71

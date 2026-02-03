@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://b75y8dafrtm6a"]
 
-[ext_resource type="Texture2D" uid="uid://dgu7ybnnlvfg" path="res://scene/res/images/image.png" id="1_4gfsm"]
+[ext_resource type="Texture2D" uid="uid://dgu7ybnnlvfg" path="res://res/images/image.png" id="1_4gfsm"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_hvnne"]
 

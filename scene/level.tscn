@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bv0akotbkktvk"]
 
-[ext_resource type="Script" uid="uid://bji2iiq1uv58k" path="res://scene/Level.cs" id="1_7g0b6"]
+[ext_resource type="Script" uid="uid://bji2iiq1uv58k" path="res://scripts/Level.cs" id="1_7g0b6"]
 [ext_resource type="PackedScene" uid="uid://davvjpxqvvjxi" path="res://scene/player.tscn" id="1_dmi07"]
 [ext_resource type="PackedScene" uid="uid://co0m5xvpp7a0u" path="res://scene/enemy.tscn" id="2_7g0b6"]
 [ext_resource type="PackedScene" uid="uid://b75y8dafrtm6a" path="res://scene/death_screen.tscn" id="3_ukt71"]
@@ -23,8 +23,8 @@ script = ExtResource("1_7g0b6")
 playerNode = NodePath("Player")
 enemyTemplate = NodePath("enemy")
 enemiesFolder = NodePath("Enemies")
-spawnRadiusLower = 15
-spawnRadiusUpper = 17
+spawnRadiusLower = 10
+spawnRadiusUpper = 15
 EnemyMinimum = 8
 EnemySpawnAmount = 7
 
@@ -37,7 +37,11 @@ shadow_enabled = true
 
 [node name="Player" parent="." unique_id=719301295 node_paths=PackedStringArray("deathScreen") instance=ExtResource("1_dmi07")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.32735205, 0)
+combatFrequency = 0.1
+AccelerationMultiplier = 100.0
 deathScreen = NodePath("../DeathScreen")
+FRICTION = 0.99
+SKYBOXSPEED = 1000.0
 
 [node name="enemy" parent="." unique_id=1079522994 node_paths=PackedStringArray("player") instance=ExtResource("2_7g0b6")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.437563, 171.29868, -25.930618)

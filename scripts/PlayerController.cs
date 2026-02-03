@@ -21,7 +21,7 @@ public partial class PlayerController : Node3D
 	[Export] public GpuParticles3D deathVFX;
 	[Export] public AudioStreamPlayer3D deathSFX;
 	[Export] public AudioStreamPlayer3D shotgunSFX;
-	[Export] public float TileSize;
+	//[Export] public float TileSize;
 	[Export] public float AccelerationMultiplier;
 	[Export] public float MaxSpeed;
 	[Export] public GpuParticles3D particle;
@@ -149,11 +149,11 @@ public partial class PlayerController : Node3D
 	{
 		if (status)
 		{
-			Input.SetCustomMouseCursor(ResourceLoader.Load("res://scene/res/images/crosshairStandard.png"));
+			Input.SetCustomMouseCursor(ResourceLoader.Load("res://res/images/crosshairStandard.png"));
 		}
 		else
 		{
-			Input.SetCustomMouseCursor(ResourceLoader.Load("res://scene/res/images/crosshairStandardHit.png"));
+			Input.SetCustomMouseCursor(ResourceLoader.Load("res://res/images/crosshairStandardHit.png"));
 		}
 	}
 	EnemyController getEnemyFromRaycast()

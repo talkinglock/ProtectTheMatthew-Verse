@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://2ig211rwg8h7"
+path="res://.godot/imported/Zombie Tsunami Official Soundtrack - In Game.mp3-1072eb91fd2118a9d4f95a909fc31948.mp3str"
+
+[deps]
+
+source_file="res://res/audio/Zombie Tsunami Official Soundtrack - In Game.mp3"
+dest_files=["res://.godot/imported/Zombie Tsunami Official Soundtrack - In Game.mp3-1072eb91fd2118a9d4f95a909fc31948.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
