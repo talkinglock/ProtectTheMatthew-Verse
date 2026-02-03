@@ -12,5 +12,5 @@ The game is currently in pre-release, but is avaliable to build and play. __It w
   
 # HOW TO EDIT #
 
-This game is a personal project, and you __may not redistrubute this game__ or __release it as if it were your own.__ However, if you would like to analyse the code and project, you are free to do so.
+This game is a personal project, and you __may not redistrubute this game__ or __release it as if it were your own.__  (see [license](LICENSE.MD)) However, if you would like to analyse the code and project, you are free to do so.
 Simply import the source code into Godot Engine .NET edition.
