@@ -6,7 +6,7 @@ A bullet hell / movement shooter game, where you Protect the matthewverse from t
 The game is currently in pre-release, but is avaliable to build and play. __It will be free, forever.__
 
 # HOW TO PLAY #
-- Download the zip file from the "Releases page"
+- Download the zip file from the "Releases" page
 - Unzip it somewhere on your computer
 - Run either executable
   
