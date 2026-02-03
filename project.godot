@@ -23,6 +23,7 @@ Main="*uid://dn4r1v2yyqgvm"
 
 [display]
 
+window/size/mode=3
 window/size/borderless=true
 mouse_cursor/custom_image="uid://doo2sfipw574l"
 
