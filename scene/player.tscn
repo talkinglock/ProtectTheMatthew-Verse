@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://r8wgkra1pgcq" path="res://scene/ui.tscn" id="3_fvtld"]
 [ext_resource type="AudioStream" uid="uid://2ig211rwg8h7" path="res://res/audio/Zombie Tsunami Official Soundtrack - In Game.mp3" id="3_oh5ij"]
 [ext_resource type="AudioStream" uid="uid://bcoq46vmyxaaj" path="res://res/audio/shoot.mp3" id="3_s4jxa"]
+[ext_resource type="Script" uid="uid://cgbwjsqkur5ev" path="res://scripts/Weapon.cs" id="5_2fvbb"]
 [ext_resource type="AudioStream" uid="uid://cv5qu5rc70o6k" path="res://res/audio/enemyDeath.mp3" id="6_hp4bs"]
 [ext_resource type="AudioStream" uid="uid://ct8enayp5di3b" path="res://res/audio/shotgun-sound-effect-pumping.mp3" id="7_g2vtq"]
 
@@ -140,8 +141,7 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_6l7ap")
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_g2vtq"]
-radius = 4.625
+[sub_resource type="BoxShape3D" id="BoxShape3D_2fvbb"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_xo3ru"]
 size = Vector3(0.56691754, 4.5182676, 0.8336911)
@@ -195,28 +195,27 @@ size = Vector3(0.25, 2, 0.25)
 [sub_resource type="BoxShape3D" id="BoxShape3D_hp4bs"]
 size = Vector3(1.7179108, 4.6011353, 0.97314453)
 
-[node name="Player" type="Node3D" unique_id=719301295 node_paths=PackedStringArray("PlayerObject", "CameraTransform", "UIController", "raycaster", "shoot", "deathVFX", "deathSFX", "shotgunSFX", "particle", "rigidBody", "skybox", "shotgunShapecast", "shotgunParticle", "cameraScript")]
+[node name="Player" type="Node3D" unique_id=719301295 node_paths=PackedStringArray("PlayerObject", "rigidBody", "CameraTransform", "UIController", "cameraScript", "deathVFX", "deathSFX", "shotgunSFX", "skybox", "InvulnerabilityTimer", "Shotgun", "Automatic")]
 script = ExtResource("1_xo3ru")
 PlayerObject = NodePath("PlayerRigidbody/PlayerMoveable")
+rigidBody = NodePath("PlayerRigidbody")
 CameraTransform = NodePath("CameraTransform")
 UIController = NodePath("UI")
-s_OFFSET = Vector3(0, 7, 0)
-invulnerabilityPeriod = 2
-raycaster = NodePath("PlayerRigidbody/PlayerMoveable/RayCast3D")
-shoot = NodePath("PlayerRigidbody/PlayerMoveable/ShootSound")
+cameraScript = NodePath("PlayerCam")
 deathVFX = NodePath("PlayerRigidbody/Explosion")
 deathSFX = NodePath("PlayerRigidbody/Death")
 shotgunSFX = NodePath("PlayerRigidbody/ShotgunSound")
+CameraOffset = Vector3(0, 10, 0)
+invulnerabilityPeriod = 2
 AccelerationMultiplier = 10.0
 MaxSpeed = 30.0
-particle = NodePath("PlayerRigidbody/PlayerMoveable/Shoot")
-rigidBody = NodePath("PlayerRigidbody")
-skybox = NodePath("PlayerRigidbody/Skybox")
+FRICTION = 0.99
 SKYBOXSPEED = 300.0
-shotgunReloadTime = 2.0
-shotgunShapecast = NodePath("PlayerRigidbody/PlayerMoveable/ShotgunShapecast")
-shotgunParticle = NodePath("PlayerRigidbody/PlayerMoveable/ShutgunVFX")
-cameraScript = NodePath("PlayerCam")
+HealthGainOnKill = 5.0
+skybox = NodePath("PlayerRigidbody/Skybox")
+InvulnerabilityTimer = NodePath("Invulnerability")
+Shotgun = NodePath("Weapons/Shotgun")
+Automatic = NodePath("Weapons/Automatic")
 
 [node name="PlayerCam" type="Camera3D" parent="." unique_id=1247003932 node_paths=PackedStringArray("cameraTransform")]
 transform = Transform3D(-1, 8.7302965e-08, -4.575356e-09, 0, 0.052335974, 0.9986295, 8.742278e-08, 0.9986295, -0.052335974, 0, 1.0078824, 0)
@@ -274,15 +273,15 @@ emitting = false
 amount = 120
 lifetime = 0.73
 one_shot = true
-explosiveness = 0.85
-randomness = 0.65
+explosiveness = 1.0
+randomness = 0.2
 fixed_fps = 70
 process_material = SubResource("ParticleProcessMaterial_bup7g")
 draw_pass_1 = SubResource("ArrayMesh_g2vtq")
 
 [node name="ShotgunShapecast" type="ShapeCast3D" parent="PlayerRigidbody/PlayerMoveable" unique_id=1404668083]
-transform = Transform3D(0.99999964, 0, 0, 0, 0.99999964, -1.7763568e-15, 0, 0, 0.99999964, 0, 4.8958607, -4.6031914e-07)
-shape = SubResource("SphereShape3D_g2vtq")
+transform = Transform3D(7.0148625, 0, 0, 0, 8.922716, -2.1316282e-14, 0, -4.5474735e-13, 5.208512, 0, 4.2106795, -3.9589747e-07)
+shape = SubResource("BoxShape3D_2fvbb")
 target_position = Vector3(0, 0, 0)
 collision_mask = 2
 collide_with_areas = true
@@ -321,8 +320,8 @@ cull_mask = 4293918722
 radius = 59.52
 
 [node name="PlayerRaycastCollider" type="Area3D" parent="PlayerRigidbody" unique_id=357492621]
-collision_layer = 2
-collision_mask = 2
+collision_layer = 4
+collision_mask = 4
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="PlayerRigidbody/PlayerRaycastCollider" unique_id=1800210965]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0022201538, -0.54849243, 0.013427734)
@@ -338,3 +337,38 @@ max_db = 3.025
 [node name="UI" parent="." unique_id=2063569886 instance=ExtResource("3_fvtld")]
 
 [node name="CameraTransform" type="Node3D" parent="." unique_id=1324603691]
+
+[node name="Invulnerability" type="Timer" parent="." unique_id=33108476]
+wait_time = 3.161
+one_shot = true
+autostart = true
+
+[node name="Weapons" type="Node" parent="." unique_id=1777134565]
+
+[node name="Automatic" type="Node" parent="Weapons" unique_id=1246623729 node_paths=PackedStringArray("ShootingParticles", "ShootAudioStream", "ReloadTimer", "RaycasterObject")]
+script = ExtResource("5_2fvbb")
+ShootingParticles = NodePath("../../PlayerRigidbody/PlayerMoveable/Shoot")
+ShootAudioStream = NodePath("../../PlayerRigidbody/PlayerMoveable/ShootSound")
+ReloadTimer = NodePath("ReloadTimer")
+RaycasterObject = NodePath("../../PlayerRigidbody/PlayerMoveable/RayCast3D")
+IsRaycastNotShapecast = true
+ExplosionSoundPerDeath = true
+HitPoints = 50.0
+
+[node name="ReloadTimer" type="Timer" parent="Weapons/Automatic" unique_id=301463954]
+wait_time = 0.1
+one_shot = true
+autostart = true
+
+[node name="Shotgun" type="Node" parent="Weapons" unique_id=3338134 node_paths=PackedStringArray("ShootingParticles", "ShootAudioStream", "ReloadTimer", "RaycasterObject")]
+script = ExtResource("5_2fvbb")
+ShootingParticles = NodePath("../../PlayerRigidbody/PlayerMoveable/ShutgunVFX")
+ShootAudioStream = NodePath("../../PlayerRigidbody/ShotgunSound")
+ReloadTimer = NodePath("ShotgunReloadTimer")
+RaycasterObject = NodePath("../../PlayerRigidbody/PlayerMoveable/ShotgunShapecast")
+OneShot = true
+HitPoints = 200.0
+
+[node name="ShotgunReloadTimer" type="Timer" parent="Weapons/Shotgun" unique_id=1779785428]
+one_shot = true
+autostart = true

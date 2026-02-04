@@ -6,102 +6,105 @@ using System.Threading.Tasks;
 
 public partial class EnemyController : Node3D
 {
+	[ExportGroup("Main Objects")]
 	[Export] public RigidBody3D rigidbody;
-	[Export] public AudioStreamPlayer3D hitSound;
-	[Export] public AudioStreamPlayer3D shootSound;
-	[Export] public float speed;
-	[Export] public float radius;
-	[Export] public float ROTATION_TIME;
 	[Export] public MeshInstance3D enemyMove;
-	[Export] public GpuParticles3D shootParticle;
-	[Export] public float combatFrequency;
-	[Export] public float HitDamage;
-	[Export] public RayCast3D raycaster;
-	
-	[Export] public AudioStreamPlayer3D explode;
-	[Export] public float FRICTION;
+	[Export] public PlayerController player;
+
+	[ExportGroup("VFX")]
 	[Export] public GpuParticles3D deathParticles;
 	[Export] public GpuParticles3D expParticles;
-	[Export] public PlayerController player;
+	[ExportGroup("Audio")]
+	[Export] public AudioStreamPlayer3D hitSound;
+	[Export] public AudioStreamPlayer3D explode;
+	[ExportGroup("Values")]
+	[Export] public float FRICTION;
+	[Export] public float radius;
+	[Export] public float RotationTime;
 	[Export] public int moveAwayUpperRadius;
 	[Export] public int moveAwayLowerRadius;
+
+	[ExportGroup("Physics Objects")]
+	[Export] public CollisionShape3D PhysicsCollider;
+	
+	[ExportGroup("Movement")]
+	[Export] public float Acceleration;
+	[Export] public float MaxSpeed;
+
+	[ExportGroup("Combat")]
+	[Export] public Weapon Automatic;
+	[Export] public Timer CombatFrequencyTimer;
+	[Export] public float CombatFrequencyTimerVariation;
+
 	public Level levelScript;
-	// Called when the node enters the scene tree for the first time.
-	[Export]public float health = 100.0f;
 	private bool alive = false;
 	private int time = 0;
 	private Vector3 forceOffset = Vector3.Zero;
 	private float combatAddition;
 	private Tween tween;
 	private float adjustedAngle = -1;
+	public ShipManager shipManager;
+	public WeaponsHandler weaponsHandler;
 	public void Initialize()
 	{
-		alive = true;
+		
+
 		Random random = new Random();
-		combatAddition = (float) random.Next(6)/3;
+		float timerVariation = random.Next((int)((100*CombatFrequencyTimerVariation) * 2)) - (100 * CombatFrequencyTimerVariation);
+		CombatFrequencyTimer.WaitTime = Math.Abs(CombatFrequencyTimer.WaitTime + (timerVariation)/100); 
+		Debug.WriteLine(CombatFrequencyTimer.WaitTime);
+
+		shipManager = new ShipManager();
+		weaponsHandler = new WeaponsHandler();
+
+		weaponsHandler.SetShipManager(shipManager);
+		weaponsHandler.AddWeapon(Automatic, "automatic");
+
+		shipManager.IsEnemy = true;
+		shipManager.SetRigidbody(rigidbody);
+		shipManager.SetPlayerStructure(enemyMove);
+		shipManager.SetMovementParameters(Acceleration, MaxSpeed, FRICTION);
+		shipManager.SetHitInformation(true, hitSound);
+		alive = true;
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	private float movementMagic(float speedInDirection, float targetSpeed)
+	Vector3 getVectorToPlayer()
 	{
-		float multiplier; // value 0-1 to multiply acceleration by.
-
-		multiplier = targetSpeed - speedInDirection;
-		if (multiplier < 0) {return 0;} // we are going too fast already
-		multiplier = multiplier / targetSpeed;
-		return multiplier;
+		Vector3 playerPosition = Vector3.Zero;
+		playerPosition.X = player.rigidBody.Position.X - rigidbody.GlobalPosition.X;
+		playerPosition.Z = player.rigidBody.Position.Z - rigidbody.GlobalPosition.Z;
+		return playerPosition;//.Normalized();
 	}
 	void UpdatePhysics()
 	{
-		Vector3 friction = -rigidbody.LinearVelocity * FRICTION;
-		if (friction.Length() > 0.05f)
-		{
-			rigidbody.ApplyForce(friction);
-		}
-
 		// go to player
+		Vector3 playerPosition = getVectorToPlayer();
 
-		Vector3 playerPosition = Vector3.Zero;
-
-		playerPosition.X = Main.PlayerPosition.X - rigidbody.GlobalPosition.X;
-		playerPosition.Z = Main.PlayerPosition.Y - rigidbody.GlobalPosition.Z;
-
-		
-		if (playerPosition.Length() >= radius)
+		if (playerPosition.Length() <= radius)
 		{
-			playerPosition.Normalized();
-			rigidbody.ApplyForce(playerPosition * movementMagic(rigidbody.LinearVelocity.Length(), speed));
+			playerPosition = Vector3.Zero;
 		}
-		
+		shipManager.UpdateMovement(playerPosition);
 
 	}
 	void UpdateRotation()
 	{
-		
-		Vector2 playerPosition;
+		Vector3 bearing = getVectorToPlayer();
 
-		playerPosition.X = Main.PlayerPosition.X - rigidbody.GlobalPosition.X;
-		playerPosition.Y = Main.PlayerPosition.Y - rigidbody.GlobalPosition.Z;
-
-		float angle = Mathf.Atan2(playerPosition.X, playerPosition.Y);
+		float angle = Mathf.Atan2(bearing.X, bearing.Z);
 		
 		//lastAngle = halfwayPoint;
-		float lerpResult = Mathf.LerpAngle(adjustedAngle, angle, ROTATION_TIME/(float)Engine.GetFramesPerSecond());
-		if (adjustedAngle == -1) { lerpResult = angle;}
-		rigidbody.Rotation = new Vector3(0, lerpResult, 0);
-		adjustedAngle = lerpResult;
+		shipManager.UpdateRotation(new Vector3(Mathf.Pi/2, angle, 0), RotationTime);
 	}
 
-	public async Task Hit(float hp, bool explosionSound)
+	public async Task DeathCheck(bool explosionSound)
 	{
 		if (!alive) {return; }
-		health -= hp;
-		hitSound.Playing = false;
-		hitSound.Playing = true;
-		if (health <= 0)
+		if (shipManager.ShouldDie())
 		{
-			//Debug.WriteLine("death");
 			alive = false;
+			PhysicsCollider.Disabled = true;
 			levelScript.enemyCount--;
 			deathParticles.Emitting = true;
 			enemyMove.QueueFree();
@@ -121,41 +124,39 @@ public partial class EnemyController : Node3D
 		}
 	}
 
+
 	void UpdateCombat()
 	{
-		if (raycaster.IsColliding() && player.canDamage == true)
+		if (player.isInvulnerable == true) {return;}
+
+		ShipManager enemyInWay = shipManager.getShipsFromRaycast((RayCast3D)Automatic.RaycasterObject);
+		if (enemyInWay != null)
 		{
-			RigidBody3D colliderRigid = (RigidBody3D)((Area3D)raycaster.GetCollider()).GetParent();
-			//Debug.WriteLine(colliderRigid.Name);
-			if (colliderRigid.Name == "Enemy")
+			if (enemyInWay.IsEnemy)
 			{
-				// pick a direction to move away from it 
 				Debug.WriteLine("Triggered");
 				Vector3 impulseAmount = levelScript.getPositionFromRadius(Vector3.Zero, moveAwayLowerRadius, moveAwayUpperRadius);
-				rigidbody.ApplyImpulse(impulseAmount * 2);
+				rigidbody.ApplyImpulse(impulseAmount/4);
 			}
-			else if (colliderRigid.Name == "PlayerRigidbody")
+			else
 			{
-				shootSound.Playing = true;
-				shootParticle.Emitting = true;
-				player.health -= HitDamage;
+				weaponsHandler.TryFire(Automatic);
 			}
-	
-		}
+		}		
 	}
-	private int combatCheck; 
 	public override void _PhysicsProcess(double delta)
 	{
-
 		if (!alive) {return;}
-		
-
+		DeathCheck(shipManager.ExplosionSoundWillPlayOnDeath);
 		time++;
-		combatCheck = (int)((combatFrequency + combatAddition) * (int)Engine.GetFramesPerSecond());
-		if (combatCheck <= 0) {combatCheck = 2;}
-		if (time % combatCheck == 0) { UpdateCombat();}
-		
-
+		if (CombatFrequencyTimer.TimeLeft == 0) 
+		{
+			UpdateCombat();
+		}
+		else
+		{
+			CombatFrequencyTimer.Start();
+		}
 		UpdateRotation();
 		UpdatePhysics();
 	}

@@ -1,0 +1,35 @@
+using Godot;
+using System;
+
+public partial class Weapon : Node
+{
+	// data structure that contains weapon information
+	[ExportGroup("Weapon Properties")]
+	[ExportSubgroup("FX")]
+	[Export] public GpuParticles3D ShootingParticles;
+	[Export] public AudioStreamPlayer3D ShootAudioStream;
+	[ExportSubgroup("Objects")]
+	[Export] public Timer ReloadTimer;
+	[Export] public Node3D RaycasterObject;
+	[ExportSubgroup("Properties")]
+	[Export] public bool IsRaycastNotShapecast;
+	[Export] public bool ExplosionSoundPerDeath;
+	[Export] public bool OneShot;
+	[Export] public float HitPoints;
+	
+
+	
+
+	public bool DoAttributesExist()
+	{
+		if(
+			ShootingParticles == null ||
+			ShootAudioStream == null ||
+			RaycasterObject == null 
+		)
+		{
+			return false;
+		}
+		return true;
+	}
+}

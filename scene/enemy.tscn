@@ -1,9 +1,10 @@
 [gd_scene format=3 uid="uid://co0m5xvpp7a0u"]
 
-[ext_resource type="Script" uid="uid://cvl31bulybavl" path="res://scene/EnemyController.cs" id="1_h08p8"]
-[ext_resource type="AudioStream" uid="uid://cv5qu5rc70o6k" path="res://scene/res/audio/enemyDeath.mp3" id="2_f87vc"]
-[ext_resource type="AudioStream" uid="uid://d1kygr677hwb7" path="res://scene/res/audio/hit.mp3" id="3_8u16h"]
-[ext_resource type="AudioStream" uid="uid://c5gduykm1xni7" path="res://scene/res/audio/laser.mp3" id="4_b7koy"]
+[ext_resource type="Script" uid="uid://cvl31bulybavl" path="res://scripts/EnemyController.cs" id="1_h08p8"]
+[ext_resource type="AudioStream" uid="uid://cv5qu5rc70o6k" path="res://res/audio/enemyDeath.mp3" id="2_f87vc"]
+[ext_resource type="AudioStream" uid="uid://d1kygr677hwb7" path="res://res/audio/hit.mp3" id="3_8u16h"]
+[ext_resource type="AudioStream" uid="uid://c5gduykm1xni7" path="res://res/audio/laser.mp3" id="4_b7koy"]
+[ext_resource type="Script" uid="uid://cgbwjsqkur5ev" path="res://scripts/Weapon.cs" id="5_yvcfn"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_vufel"]
 size = Vector3(0.66239786, 5.2478256, 0.56010056)
@@ -161,26 +162,25 @@ material = SubResource("StandardMaterial3D_b7koy")
 [sub_resource type="BoxShape3D" id="BoxShape3D_8u16h"]
 size = Vector3(1.5834961, 5.209076, 1.4735107)
 
-[node name="enemy" type="Node3D" unique_id=1079522994 node_paths=PackedStringArray("rigidbody", "hitSound", "shootSound", "enemyMove", "shootParticle", "raycaster", "explode", "deathParticles", "expParticles")]
+[node name="enemy" type="Node3D" unique_id=1079522994 node_paths=PackedStringArray("rigidbody", "enemyMove", "deathParticles", "expParticles", "hitSound", "explode", "PhysicsCollider", "Automatic", "CombatFrequencyTimer")]
 script = ExtResource("1_h08p8")
 rigidbody = NodePath("Enemy")
-hitSound = NodePath("Enemy/HitSound")
-shootSound = NodePath("Enemy/shootSounds")
-speed = 20.0
-radius = 10.0
-ROTATION_TIME = 12.0
 enemyMove = NodePath("Enemy/MeshInstance3D")
-shootParticle = NodePath("Enemy/MeshInstance3D/ShootEffect")
-combatFrequency = 0.2
-HitDamage = 2.5
-raycaster = NodePath("Enemy/MeshInstance3D/Raycast")
-explode = NodePath("Enemy/AudioStreamPlayer3D")
-FRICTION = 0.99
 deathParticles = NodePath("Enemy/Explosion")
 expParticles = NodePath("Enemy/EXP")
-moveAwayUpperRadius = 12
-moveAwayLowerRadius = 7
-health = 50.0
+hitSound = NodePath("Enemy/HitSound")
+explode = NodePath("Enemy/AudioStreamPlayer3D")
+FRICTION = 0.99
+radius = 10.0
+RotationTime = 0.1
+moveAwayUpperRadius = 20
+moveAwayLowerRadius = 14
+PhysicsCollider = NodePath("Enemy/Collider")
+Acceleration = 20.0
+MaxSpeed = 10.0
+Automatic = NodePath("Weapons/Automatic")
+CombatFrequencyTimer = NodePath("CombatFrequency")
+CombatFrequencyTimerVariation = 0.4
 
 [node name="Enemy" type="RigidBody3D" parent="." unique_id=50500928]
 transform = Transform3D(1.25, 0, 0, 0, 1.25, 0, 0, 0, 1.25, 0, 0, 0)
@@ -198,9 +198,9 @@ transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0
 mesh = SubResource("PrismMesh_vufel")
 
 [node name="Raycast" type="RayCast3D" parent="Enemy/MeshInstance3D" unique_id=1954374991]
-transform = Transform3D(1, 0, 0, 0, 1, -3.5527137e-15, 0, 3.5527137e-15, 1, 0, 0.76141405, -3.3282465e-08)
+transform = Transform3D(1, 0, 0, 0, 1, -3.5527137e-15, 0, 3.5527137e-15, 1, 0, 0.7814874, -3.4159896e-08)
 target_position = Vector3(0, 10, 0)
-collision_mask = 2
+collision_mask = 6
 hit_from_inside = true
 collide_with_areas = true
 collide_with_bodies = false
@@ -269,3 +269,24 @@ shape = SubResource("BoxShape3D_8u16h")
 
 [node name="shootSounds" type="AudioStreamPlayer3D" parent="Enemy" unique_id=438526135]
 stream = ExtResource("4_b7koy")
+
+[node name="Weapons" type="Node" parent="." unique_id=589320183]
+
+[node name="Automatic" type="Node" parent="Weapons" unique_id=14477514 node_paths=PackedStringArray("ShootingParticles", "ShootAudioStream", "ReloadTimer", "RaycasterObject")]
+script = ExtResource("5_yvcfn")
+ShootingParticles = NodePath("../../Enemy/MeshInstance3D/ShootEffect")
+ShootAudioStream = NodePath("../../Enemy/shootSounds")
+ReloadTimer = NodePath("ReloadTimer")
+RaycasterObject = NodePath("../../Enemy/MeshInstance3D/Raycast")
+IsRaycastNotShapecast = true
+OneShot = true
+HitPoints = 2.0
+
+[node name="ReloadTimer" type="Timer" parent="Weapons/Automatic" unique_id=465632714]
+wait_time = 2.0
+one_shot = true
+autostart = true
+
+[node name="CombatFrequency" type="Timer" parent="." unique_id=2037388623]
+one_shot = true
+autostart = true

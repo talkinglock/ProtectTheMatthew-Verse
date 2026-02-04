@@ -4,74 +4,65 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO.Pipes;
 using System.Linq;
+using System.Linq.Expressions;
 
 //using System.Numerics;
 
+
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 public partial class PlayerController : Node3D
 {
+	[ExportGroup("Main Objects")]
+
 	[Export] public Node3D PlayerObject;
-	[Export] public float combatFrequency;
+	[Export] public RigidBody3D rigidBody;
+
 	[Export] public Node3D CameraTransform;
 	[Export] public Controller UIController;
-	[Export] public Vector3 s_OFFSET;
-	[Export] public int invulnerabilityPeriod;
-	[Export] public RayCast3D raycaster;
-	[Export] public AudioStreamPlayer3D shoot;
+	[Export] public CameraManager cameraScript;
+	[Export] public Control deathScreen;
+
+	[ExportGroup("VFX")]
 	[Export] public GpuParticles3D deathVFX;
+
+	[ExportGroup("Audio")]
 	[Export] public AudioStreamPlayer3D deathSFX;
 	[Export] public AudioStreamPlayer3D shotgunSFX;
+
+	[ExportGroup("Values")]
+	[Export] public Vector3 CameraOffset;
+	[Export] public int invulnerabilityPeriod;
+	
 	//[Export] public float TileSize;
 	[Export] public float AccelerationMultiplier;
 	[Export] public float MaxSpeed;
-	[Export] public GpuParticles3D particle;
-	[Export] public Control deathScreen;
 	[Export] public float FRICTION;
-	[Export] public RigidBody3D rigidBody;
-	[Export] public Skybox skybox;
 	[Export] public float SKYBOXSPEED;
-	[Export] public float shotgunReloadTime;
-	[Export] public ShapeCast3D shotgunShapecast;
-	[Export] public GpuParticles3D shotgunParticle;
-	[Export] public CameraManager cameraScript;
-	private float shotgunTimerStart = 0; 
-	Vector3 currentPos;
-	public override void _Ready()
-	{
-		currentPos = rigidBody.Position;
-	}
+	[Export] public float HealthGainOnKill;
+	[ExportGroup("Misc Objects")]
+	[Export] public Skybox skybox;
+	[Export] public Timer InvulnerabilityTimer;
+	[ExportGroup("Combat")]
+	[Export] public Weapon Shotgun;
+	[Export] public Weapon Automatic;
 
+	private WeaponsHandler weaponsHandler;
+	public ShipManager shipManager;
+
+	
 	private float angle = 0;
 	private int time = 0;
-	private bool alive = true;
-	public int Kills = 0;
-	public float health = 100;
-	public bool canDamage = false;
-	private bool shotgunCanShoot = true;
-	void UpdateRotation()
+	private bool alive = false;
+	public int Score = 0;
+	public bool isInvulnerable = false;
+	private Standard std = new Standard();
+
+	public void KillAchieved()
 	{
-		Vector2 mouseCoordinates = GetViewport().GetMousePosition();
-		Vector2 gameSize = DisplayServer.WindowGetSize();
-
-		Vector2 normalizedCoordiantes;
-		normalizedCoordiantes.X = gameSize.X/2 - mouseCoordinates.X;
-		normalizedCoordiantes.Y = gameSize.Y/2 - mouseCoordinates.Y;
-
-		angle = Mathf.Atan2(normalizedCoordiantes.X, normalizedCoordiantes.Y);
-
-		PlayerObject.Rotation = new Vector3(Mathf.Pi/2,angle,0);//Mathf.Pi/2);
-		//Debug.WriteLine(gameSize);
-
-	}
-
-	private float movementMagic(float speedInDirection, float targetSpeed)
-	{
-		float multiplier; // value 0-1 to multiply acceleration by.
-
-		multiplier = targetSpeed - speedInDirection;
-		if (multiplier < 0) {return 0;} // we are going too fast already
-		multiplier = multiplier / targetSpeed;
-		return multiplier;
+		// when we get a kill
+		Score++;
+		shipManager.Heal(HealthGainOnKill);
 	}
 	void UpdateMovement()
 	{
@@ -92,211 +83,50 @@ public partial class PlayerController : Node3D
 		{
 			moveDirection.X = -1;
 		}
-		
-		
-		Vector3 velocityInDirection = rigidBody.LinearVelocity;//.Rotated(new Vector3(0,1,0), angle - Mathf.Pi/2);
-		if (moveDirection != Vector3.Zero)
-		{
-			moveDirection = moveDirection.Normalized();
-			Vector3 globalMoveDirection = moveDirection;//.Rotated(new Vector3(0,1,0), angle - Mathf.Pi/2);
-			Vector3 targetVelocity = globalMoveDirection * AccelerationMultiplier;
-			
-			//Vector3 velocityInDirection = rigidBody.LinearVelocity;//.Rotated(new Vector3(0,1,0), angle - Mathf.Pi/2);
-			float speedInDirection = velocityInDirection.Length();
-			
-			float speedMultiplier = movementMagic(speedInDirection, MaxSpeed) * AccelerationMultiplier;
-			Vector3 acceleration = new Vector3(
-				globalMoveDirection.X * speedMultiplier,
-				globalMoveDirection.Y * speedMultiplier,
-				globalMoveDirection.Z * speedMultiplier
-			);
-			rigidBody.ApplyForce(acceleration);
-
-		}
-		//else
-		//{
-			//Vector3 velocityInDirection = rigidBody.LinearVelocity;//.Rotated(new Vector3(0,1,0), angle - Mathf.Pi/2);
-			Vector3 friction = -velocityInDirection * FRICTION;
-			if (friction.Length() > 0.05f)
-			{
-				rigidBody.ApplyForce(friction);
-			}
-		//}
+		shipManager.UpdateMovement(moveDirection);
 	}
 
 
 	void UpdateCamera()
 	{
-		CameraTransform.Position = rigidBody.Position + s_OFFSET;
+		CameraTransform.Position = rigidBody.Position + CameraOffset;
 	}
 
-	void UpdateTiles()
+	void UpdateSkybox()
 	{
 		skybox.SetShaderPosition(new Vector2(rigidBody.Position.X/SKYBOXSPEED, rigidBody.Position.Z/SKYBOXSPEED));
 	}
-
-	public void KillAchieved()
-	{
-		// when we get a kill
-		Main.PlayerScore++;
-		health += 5;
-		if (health > 100)
-		{
-			health = 100;
-		}
-	}
-	void setCombatMouse(bool status)
-	{
-		if (status)
-		{
-			Input.SetCustomMouseCursor(ResourceLoader.Load("res://res/images/crosshairStandard.png"));
-		}
-		else
-		{
-			Input.SetCustomMouseCursor(ResourceLoader.Load("res://res/images/crosshairStandardHit.png"));
-		}
-	}
-	EnemyController getEnemyFromRaycast()
-	{
-		if (raycaster.IsColliding())
-		{
-			setCombatMouse(true);
-			Area3D area = (Area3D)raycaster.GetCollider();
-
-			if (area.Name == "EnemyRaycastCollider")
-			{
-				EnemyController enemy = (EnemyController)area.GetParent().GetParent();
-				return enemy;
-			}
-		}
-		else
-		{
-			setCombatMouse(false);
-		}
-		return null;
-	}
-	List<EnemyController> getEnemyFromShapecast()
-	{
-		List<EnemyController> enemies = new List<EnemyController>();
-		if (shotgunShapecast.IsColliding())
-		{
-			setCombatMouse(true);
-			int count = shotgunShapecast.GetCollisionCount();
-			if (count <= 0) { return null;}
-			for (int i = 0; i < count; i++)
-			{
-				Area3D area = (Area3D)shotgunShapecast.GetCollider(i);
-				if (area.Name == "EnemyRaycastCollider")
-				{
-					EnemyController enemy = (EnemyController)area.GetParent().GetParent();
-					enemies.Add(enemy);
-				}
-			}	
-			return enemies;
-		}
-		else
-		{
-			setCombatMouse(false);
-		}
-		return null;
-	}
+	
 	void UpdateCombat(double delta)
 	{
-		
-		Main.PlayerPosition = new Vector2(rigidBody.GlobalPosition.X, rigidBody.GlobalPosition.Z);
-		if ((int)(time % (combatFrequency * Engine.GetFramesPerSecond())) != 0) {return;}
-		Kills = Main.PlayerScore;
 		if (Input.IsMouseButtonPressed(MouseButton.Left))
 		{
-			EnemyController enemy = getEnemyFromRaycast();
-			particle.Emitting = true;
-			if (!shoot.Playing)
-			{
-				shoot.Playing = true;
-			}
-			if (enemy != null)
-			{
-				enemy.Hit(15.0f, true);
-			}
+			weaponsHandler.TryFire(Automatic);
 		}
 		else
 		{
-			setCombatMouse(false);
-			shoot.Playing = false;
-			particle.Emitting = false;
+			weaponsHandler.UnfireWeapon(Automatic);
 		}
-		int shotgunShootModulo = (int)((time) % (shotgunReloadTime * Engine.GetFramesPerSecond()));
-		Debug.WriteLine(shotgunShootModulo);
-		if (shotgunShootModulo <= 10) 
-		{
-			shotgunCanShoot = true; 
-			Debug.WriteLine("Shotgun Can shoot!"); 
-			return;
-		}
-
 		if (Input.IsKeyPressed(Key.E))
 		{
-			if (!shotgunCanShoot) { return;}
-			
-
-			shotgunSFX.Playing = true;
-
-			
-			//cameraScript.Explode(0.25f, 0.1f, 4,1);
-
-			shotgunCanShoot = false;
-			//shotgunTimerStart = time;
-			shotgunParticle.Emitting = true;
-			
-			List<EnemyController> enemies = getEnemyFromShapecast();
-			foreach(EnemyController enemy in enemies)
-			{
-				if (enemy != null)
-				{
-					enemy.Hit(200.0f, false);
-				}
-			}
+			weaponsHandler.TryFire(Shotgun);
 		}
-		else
-		{
-			//setCombatMouse(false);
-			//shotgunSFX.Playing = false;
-			shotgunParticle.Emitting = false;
-		}
-	}
-	private async void Die()
-	{
-		alive = false;
-		deathVFX.Emitting = true;
-		PlayerObject.QueueFree();
-
-		deathSFX.Playing = true;
-		
-		CameraManager cam = (CameraManager)GetNode("PlayerCam");
-		cam.Explode(3.5f, 3.5f, 2,2);
-			
-		await ToSignal(deathSFX, AudioStreamPlayer3D.SignalName.Finished);
-		deathScreen.Visible = true;
-		QueueFree();
 	}
 
 	void UpdateUI()
 	{
-		UIController.SetHealth(health.ToString());
-		UIController.SetScore(Kills.ToString());
+		UIController.SetHealth(shipManager.GetHealth().ToString());
+		UIController.SetScore(Score.ToString());
 	}
-	void UpdateInvunerability()
+	private async Task UpdateInvunerability()
 	{
-		if (canDamage == true) {return;}
-		float fps = (float) Engine.GetFramesPerSecond();
-		if (fps < 10)
+		if (InvulnerabilityTimer.TimeLeft == 0)
 		{
-			fps = 60;
+			isInvulnerable = false;
 		}
-		float timeToWait = invulnerabilityPeriod * fps;
-		if (time >= timeToWait)
+		else
 		{
-			canDamage = true;
+			isInvulnerable = true;
 		}
 	}
 	public override void _PhysicsProcess(double delta)
@@ -306,20 +136,62 @@ public partial class PlayerController : Node3D
 		base._PhysicsProcess(delta);
 		UpdateMovement();
 	}
+
+	void UpdateRotation()
+	{
+		Vector2 mouseCoordinates = GetViewport().GetMousePosition();
+		Vector2 gameSize = DisplayServer.WindowGetSize();
+
+		Vector2 normalizedCoordiantes;
+		normalizedCoordiantes.X = gameSize.X/2 - mouseCoordinates.X;
+		normalizedCoordiantes.Y = gameSize.Y/2 - mouseCoordinates.Y;
+
+		angle = Mathf.Atan2(normalizedCoordiantes.X, normalizedCoordiantes.Y);
+
+		shipManager.UpdateRotation(new Vector3(0, angle,0));
+	}
+
+	private async Task UpdateDeath()
+	{
+		if (shipManager.ShouldDie())
+		{
+			alive = false;
+			deathVFX.Emitting = true;
+			PlayerObject.QueueFree();
+
+			deathSFX.Playing = true;
+			
+			CameraManager cam = (CameraManager)GetNode("PlayerCam");
+			cam.Explode(3.5f, 3.5f, 2,2);
+				
+			await ToSignal(deathSFX, AudioStreamPlayer3D.SignalName.Finished);
+			deathScreen.Visible = true;
+			QueueFree();
+		}
+	}
 	public override void _Process(double delta)
 	{
 		time++;
+		UpdateDeath();
 		if (!alive) {return;}
-		if (health <= 0)
-		{
-			Die(); return;
-		}
-		//Debug.WriteLine(health);
 		UpdateUI();
 		UpdateCombat(delta);
 		UpdateRotation();
 		UpdateCamera();
-		UpdateTiles();
 	}
+	public override void _Ready()
+	{
+		weaponsHandler = new WeaponsHandler();
+		shipManager = new ShipManager();
 
+		weaponsHandler.SetShipManager(shipManager);
+
+		weaponsHandler.AddWeapon(Shotgun, "shotgun");
+		weaponsHandler.AddWeapon(Automatic, "automatic");
+
+		shipManager.SetRigidbody(rigidBody);
+		shipManager.SetPlayerStructure(PlayerObject);
+		shipManager.SetMovementParameters(AccelerationMultiplier, MaxSpeed, FRICTION);
+		alive = true;
+	}
 }
