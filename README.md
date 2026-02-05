@@ -2,7 +2,7 @@
 
 <img width="1191" height="682" alt="image" src="https://github.com/user-attachments/assets/22e4e0fc-c268-4ec8-b841-2aba160510dd" />
 
-A bullet hell / movement shooter game, where you Protect the matthewverse from those who wish to diet.
+A fast paced space / movement shooter game, where you Protect the matthewverse from those who wish to diet.
 The game is currently in pre-release, but is avaliable to build and play. __It will be free, forever.__
 
 # HOW TO PLAY #
