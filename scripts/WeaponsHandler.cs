@@ -23,13 +23,20 @@ public partial class WeaponsHandler : Node3D
 	}
 	public int AddWeapon(Weapon weaponToAdd, string name)
 	{
-		if (weaponToAdd.ReloadTimer ==  null) {Debug.WriteLine(name);}
 		weaponToAdd.ReloadTimer.OneShot = true;
 		weaponToAdd.ReloadTimer.Start();
 		weaponDictionary.Add(name, weaponToAdd);
 		return weaponDictionary.Count();
 	}
 
+	public bool CanFire(Weapon weapon)
+	{
+		if (weapon.ReloadTimer.TimeLeft != 0)
+		{
+			return false;
+		}
+		return true;
+	}
 	public void IsEnemy()
 	{
 		isEnemy = true;
@@ -118,7 +125,6 @@ public partial class WeaponsHandler : Node3D
 
 	public async Task<bool> TryFire(Weapon weapon)
 	{
-	   
 		return await fire(weapon);
 	}
 	public async Task<bool> TryFire(string weaponName)

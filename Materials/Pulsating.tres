@@ -1,0 +1,7 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://b2fbf8nm2586q"]
+
+[ext_resource type="Shader" uid="uid://de3trqbm4kdg1" path="res://scene/YellowPulsating.gdshader" id="1_23pjs"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_23pjs")

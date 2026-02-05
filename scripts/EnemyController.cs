@@ -52,7 +52,6 @@ public partial class EnemyController : Node3D
 		Random random = new Random();
 		float timerVariation = random.Next((int)((100*CombatFrequencyTimerVariation) * 2)) - (100 * CombatFrequencyTimerVariation);
 		CombatFrequencyTimer.WaitTime = Math.Abs(CombatFrequencyTimer.WaitTime + (timerVariation)/100); 
-		Debug.WriteLine(CombatFrequencyTimer.WaitTime);
 
 		shipManager = new ShipManager();
 		weaponsHandler = new WeaponsHandler();
@@ -68,7 +67,6 @@ public partial class EnemyController : Node3D
 		alive = true;
 	}
 
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	Vector3 getVectorToPlayer()
 	{
 		Vector3 playerPosition = Vector3.Zero;
@@ -129,10 +127,10 @@ public partial class EnemyController : Node3D
 	{
 		if (player.isInvulnerable == true) {return;}
 
-		ShipManager enemyInWay = shipManager.getShipsFromRaycast((RayCast3D)Automatic.RaycasterObject);
-		if (enemyInWay != null)
+		ShipManager shipInWay = shipManager.getShipsFromRaycast((RayCast3D)Automatic.RaycasterObject);
+		if (shipInWay != null)
 		{
-			if (enemyInWay.IsEnemy)
+			if (shipInWay.IsEnemy)
 			{
 				Debug.WriteLine("Triggered");
 				Vector3 impulseAmount = levelScript.getPositionFromRadius(Vector3.Zero, moveAwayLowerRadius, moveAwayUpperRadius);
