@@ -1,0 +1,7 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://clx46ly56lepd"]
+
+[ext_resource type="Shader" uid="uid://bm87uucvict6u" path="res://shaders/Veins.gdshader" id="1_83u25"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_83u25")

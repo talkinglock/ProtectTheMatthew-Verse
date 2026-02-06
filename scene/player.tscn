@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://8uai7w6ut78s" path="res://scripts/PlayerController.cs" id="1_xo3ru"]
 [ext_resource type="Script" uid="uid://cuodjjiuj5ry2" path="res://scripts/CameraManager.cs" id="2_ct4mp"]
 [ext_resource type="PackedScene" uid="uid://k86aoimc06ce" path="res://scene/skybox.tscn" id="2_hjaqi"]
+[ext_resource type="Material" uid="uid://clx46ly56lepd" path="res://Materials/Veins.tres" id="2_iuf2t"]
 [ext_resource type="PackedScene" uid="uid://r8wgkra1pgcq" path="res://scene/ui.tscn" id="3_fvtld"]
 [ext_resource type="AudioStream" uid="uid://2ig211rwg8h7" path="res://res/audio/Zombie Tsunami Official Soundtrack - In Game.mp3" id="3_oh5ij"]
 [ext_resource type="AudioStream" uid="uid://bcoq46vmyxaaj" path="res://res/audio/shoot.mp3" id="3_s4jxa"]
@@ -16,9 +17,8 @@
 [ext_resource type="AudioStream" uid="uid://ct8enayp5di3b" path="res://res/audio/shotgun-sound-effect-pumping.mp3" id="7_g2vtq"]
 [ext_resource type="ArrayMesh" uid="uid://q4ivxl8vja2d" path="res://res/models/MatthewMachine/HeartTop.obj" id="7_j4wxg"]
 [ext_resource type="AudioStream" uid="uid://cnp7c4pviiy0q" path="res://scene/res/audio/DashSound.mp3" id="8_ml7e8"]
-[ext_resource type="ArrayMesh" uid="uid://c54tl1br1p140" path="res://res/models/MatthewMachine/Veins8.obj" id="10_v4iqv"]
-[ext_resource type="Shader" uid="uid://bm87uucvict6u" path="res://shaders/Veins.gdshader" id="11_42h83"]
 [ext_resource type="ArrayMesh" uid="uid://ba12og6et24or" path="res://res/models/MatthewMachine/RightWing.obj" id="12_42h83"]
+[ext_resource type="Script" uid="uid://by1ajetebkjgk" path="res://scripts/VeinShaderSet.cs" id="12_iuf2t"]
 [ext_resource type="AudioStream" uid="uid://n8h6ok3nq52t" path="res://scene/res/audio/heartbeat.mp3" id="18_iuf2t"]
 
 [sub_resource type="Curve" id="Curve_hp4bs"]
@@ -136,7 +136,7 @@ spread = 2.0
 initial_velocity_max = 120.0
 gravity = Vector3(0, 0, 0)
 scale_curve = SubResource("CurveTexture_g2vtq")
-color = Color(0.9356713, 0.6211192, 0, 1)
+color = Color(0.9981052, 0.48271763, 0.49234796, 1)
 color_initial_ramp = SubResource("GradientTexture1D_oh5ij")
 alpha_curve = SubResource("CurveTexture_s4jxa")
 emission_curve = SubResource("CurveTexture_hp4bs")
@@ -261,10 +261,6 @@ render_priority = 0
 shader = ExtResource("5_34jf3")
 shader_parameter/baseColor = Vector3(1, 0.1, 0.1)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_iuf2t"]
-render_priority = 0
-shader = ExtResource("11_42h83")
-
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_m5d84"]
 resource_name = "Material.002"
 albedo_color = Color(0.8, 0.8, 0.8, 1)
@@ -303,13 +299,151 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_ef48p")
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_iuf2t"]
+render_priority = 0
+shader = ExtResource("5_34jf3")
+shader_parameter/baseColor = Vector3(0.7, 0.7, 0.1)
+
+[sub_resource type="Animation" id="Animation_kk4ol"]
+resource_name = "Auto"
+length = 0.3
+loop_mode = 1
+tracks/0/type = "position_3d"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("PlayerRigidbody/PlayerMoveable/MattMachine/LeftWing")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = PackedFloat32Array(0, 1, 0, 0, 0, 0.10000001, 1, 0, -4.319216e-08, -1.752058, 0.2, 1, 0, 0, 0)
+tracks/1/type = "position_3d"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("PlayerRigidbody/PlayerMoveable/MattMachine/RightWing")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = PackedFloat32Array(0.1, 1, 0, 0, 0, 0.2, 1, 0, -4.335797e-08, -1.7587843, 0.3, 1, 0, 0, 0)
+tracks/2/type = "rotation_3d"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("PlayerRigidbody/PlayerMoveable/MattMachine/RightWing")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = PackedFloat32Array(0.1, 1, 0, 0, 0, 1, 0.2, 1, 0, 0, 0, 1, 0.3, 1, 0, 0, 0, 1)
+tracks/3/type = "rotation_3d"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("PlayerRigidbody/PlayerMoveable/MattMachine/LeftWing")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = PackedFloat32Array(0, 1, 0, 0, 0, 1, 0.10000001, 1, -3.8840442e-16, -0.014916268, 3.6771938e-10, 0.9998888, 0.2, 1, 0, 0, 0, 1)
+tracks/4/type = "scale_3d"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("PlayerRigidbody/PlayerMoveable/MattMachine/LeftWing")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = PackedFloat32Array(0, 1, 1, 1, 1, 0.10000001, 1, 0.9999998, 0.9999999, 0.9999999, 0.2, 1, 1, 1, 1)
+tracks/5/type = "scale_3d"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("PlayerRigidbody/PlayerMoveable/MattMachine/RightWing")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = PackedFloat32Array(0.1, 1, 1, 1, 1, 0.2, 1, 0.9999999, 0.9999999, 0.9999999, 0.3, 1, 1, 1, 1)
+
+[sub_resource type="Animation" id="Animation_iuf2t"]
+length = 0.001
+tracks/0/type = "position_3d"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("PlayerRigidbody/PlayerMoveable/MattMachine/LeftWing")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = PackedFloat32Array(0, 1, 0, 0, 0)
+tracks/1/type = "position_3d"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("PlayerRigidbody/PlayerMoveable/MattMachine/RightWing")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = PackedFloat32Array(0, 1, 0, 0, 0)
+
+[sub_resource type="Animation" id="Animation_jrjdb"]
+resource_name = "new_animation"
+length = 5.0
+loop_mode = 2
+tracks/0/type = "position_3d"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("PlayerRigidbody/PlayerMoveable/MattMachine/LeftWing")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = PackedFloat32Array(0, 1, 0, 0, 0, 1.04, 1, 0, 0, 0, 1.9666667, 1, 0, 0, 0, 2.98, 1, -0.32320666, 0, 0, 4, 1, -0.3232066, 0, 0, 5, 1, 0, 0, 0)
+tracks/1/type = "position_3d"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("PlayerRigidbody/PlayerMoveable/MattMachine/RightWing")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = PackedFloat32Array(0, 1, 0, 0, 0, 1.0333334, 1, 0.22093603, 0, 0, 1.97, 1, 0.220936, -1.2857085e-08, -0.5215382, 2.97, 1, 0.22093597, -2.595973e-09, -0.10530369, 4.01, 1, 0.22093594, -0.24197543, -0.1053037, 5, 1, 0, 0, 0)
+tracks/2/type = "rotation_3d"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("PlayerRigidbody/PlayerMoveable/MattMachine/LeftWing")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = PackedFloat32Array(0, 1, 0, 0, 0, 1, 1.04, 1, 8.1929124e-16, 0.012888901, -3.1774025e-10, 0.9999169, 1.9666667, 1, -0.000113321206, -0.0056013274, -0.020226669, 0.99977976, 2.98, 1, 5.8472284e-05, -0.00560217, 0.010436722, 0.99992985, 4, 1, 0.00095947477, 0.021821516, -0.017713146, 0.9996045, 5, 1, 0, 0, 0, 1)
+tracks/3/type = "rotation_3d"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("PlayerRigidbody/PlayerMoveable/MattMachine/RightWing")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = PackedFloat32Array(0, 1, 0, 0, 0, 1, 1.0333334, 1, 1.5606737e-15, 0.038501177, -9.491402e-10, 0.9992585, 1.97, 1, 0.0005933283, 0.038496614, -0.01539922, 0.9991399, 2.97, 1, 0.0016259643, -0.028677132, -0.01532463, 0.99946994, 4.01, 1, 0.0012304216, -0.002905601, -0.015361453, 0.99987704, 5, 1, 0, 0, 0, 1)
+tracks/4/type = "scale_3d"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("PlayerRigidbody/PlayerMoveable/MattMachine/LeftWing")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = PackedFloat32Array(0, 1, 1, 1, 1, 1.04, 1, 0.99999994, 0.99999994, 0.99999994, 1.9666667, 1, 0.99999994, 0.99999964, 0.99999994, 2.98, 1, 0.9999999, 0.99999946, 0.9999999, 4, 1, 0.99999976, 0.9999997, 1.0000001, 5, 1, 1, 1, 1)
+tracks/5/type = "scale_3d"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("PlayerRigidbody/PlayerMoveable/MattMachine/RightWing")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = PackedFloat32Array(0, 1, 0.99999994, 0.99999994, 0.99999994, 1.0333334, 1, 0.9999999, 0.9999999, 1, 1.97, 1, 0.9999998, 0.99999976, 1, 2.97, 1, 0.9999997, 0.9999997, 0.99999994, 4.01, 1, 0.9999995, 0.9999997, 0.9999999, 5, 1, 0.99999994, 0.99999994, 0.99999994)
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_kk4ol"]
+_data = {
+&"Auto": SubResource("Animation_kk4ol"),
+&"RESET": SubResource("Animation_iuf2t"),
+&"new_animation": SubResource("Animation_jrjdb")
+}
+
+[sub_resource type="Curve3D" id="Curve3D_jrjdb"]
+bake_interval = 0.05
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0.685019, 0.22675681, -0.23282552, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1.352725, -0.06760383, 0.56771946, 0, 0, 0, 0, 0, 0, -2.954403, 1.332506, 1.0755155, 0, 0, 0, 0, 0, 0, -4.1515737, 0.16316223, 1.9345483, 0, 0, 0, 0, 0, 0, -5.201886, -0.2523086, 3.2317042, 0, 0, 0, 0, 0, 0, -5.0120263, -0.9629023, 3.9327276, 0, 0, 0, 0, 0, 0, -4.691089, -2.5805206, 5.8867216, 0, 0, 0, 0, 0, 0, -4.7021103, -4.312006, 7.3401613, 0, 0, 0, 0, 0, 0, -5.304217, -4.923104, 7.670804, 0, 0, 0, 0, 0, 0, -3.7701936, -5.9034863, 7.7480574, 0, 0, 0, 0, 0, 0, -3.3009953, -5.7290783, 6.207152, 0, 0, 0, 0, 0, 0, -3.1983132, -5.567487, 5.106661, 0, 0, 0, 0, 0, 0, -0.34898496, -5.2779818, 1.648022, 0, 0, 0, 0, 0, 0, 1.525837, -5.3447323, 1.495283, 0, 0, 0, 0, 0, 0, 3.44408, -5.5118537, 4.2414074, 0, 0, 0, 0, 0, 0, 4.8829613, -5.5371413, 3.3890717, 0, 0, 0, 0, 0, 0, 4.54909, -5.4488406, 2.7293193, 0, 0, 0, 0, 0, 0, 4.6295986, -5.622091, 1.7152292, 0, 0, 0, 0, 0, 0, 5.3486776, -4.3866916, 1.5691365, 0, 0, 0, 0, 0, 0, 5.4473295, -2.1861534, 1.6586496, 0, 0, 0, 0, 0, 0, 5.550921, -1.1807628, 1.7208625, 0, 0, 0, 0, 0, 0, 4.130537, -1.4020091, 2.4203706, 0, 0, 0, 0, 0, 0, 2.6377447, -1.4999766, 3.820582, 0, 0, 0, 0, 0, 0, 1.6642288, -1.5980723, 5.5342155, 0, 0, 0, 0, 0, 0, 0.9467579, -2.325263, 7.975382, 0, 0, 0, 0, 0, 0, 0.6888337, -3.0504496, 9.051855, 0, 0, 0, 0, 0, 0, -0.06517744, -3.4808385, 9.763143, 0, 0, 0, 0, 0, 0, -1.4705191, -3.5046947, 9.309226, 0, 0, 0, 0, 0, 0, -3.1724539, -2.6646905, 9.397181, 0, 0, 0, 0, 0, 0, -3.1211262, -2.4461265, 8.511191, 0, 0, 0, 0, 0, 0, -2.7121925, -1.8149655, 6.234711, 0, 0, 0, 0, 0, 0, -2.2525892, -1.0442669, 4.528902, 0, 0, 0, 0, 0, 0, -1.1612988, -1.7739986, 3.1526248, 0, 0, 0, 0, 0, 0, 0.13709497, -1.6007642, 1.34938, 0, 0, 0, 0, 0, 0, 1.5192119, -1.443442, 0.24354935, 0, 0, 0, 0, 0, 0, 3.1846817, -1.541612, -0.3856039, 0, 0, 0, 0, 0, 0, 4.4808326, -1.164084, -0.81842923, 0, 0, 0, 0, 0, 0, 5.408456, -1.3300378, -1.2822478, 0, 0, 0, 0, 0, 0, 5.4168015, -3.176338, -1.5367744, 0, 0, 0, 0, 0, 0, 6.514616, -4.79304, -3.430865, 0, 0, 0, 0, 0, 0, 8.0915985, -5.395563, -3.7065632, 0, 0, 0, 0, 0, 0, 9.254648, -5.277599, -3.2252653, 0, 0, 0, 0, 0, 0, 9.720898, -4.247344, -3.4832985, 0, 0, 0, 0, 0, 0, 10.326233, -4.650033, -2.8743312, 0, 0, 0, 0, 0, 0, 11.217072, -5.0411034, -2.016846, 0, 0, 0, 0, 0, 0, 11.511515, -5.0727825, 0.18455458, 0, 0, 0, 0, 0, 0, 11.555307, -4.868595, 2.0583158, 0, 0, 0, 0, 0, 0, 11.548193, -4.1263404, 4.2490277, 0, 0, 0, 0, 0, 0, 11.570997, -4.155695, 4.977811, 0, 0, 0, 0, 0, 0, 11.470518, -5.414218, 6.2122746, 0, 0, 0, 0, 0, 0, 11.286848, -5.3306036, 7.2170725, 0, 0, 0, 0, 0, 0, 11.379316, -3.6449845, 8.364445, 0, 0, 0, 0, 0, 0, 11.352795, -0.83236265, 8.995288, 0, 0, 0, 0, 0, 0, 10.280627, 0.28309035, 9.3085785, 0, 0, 0, 0, 0, 0, 9.43445, 0.62122273, 9.630816, 0, 0, 0, 0, 0, 0, 9.199449, 0.48042774, 9.803117, 0, 0, 0, 0, 0, 0, 9.198488, -1.0780191, 9.53207, 0, 0, 0, 0, 0, 0, 9.124159, -2.0962887, 7.8827877, 0, 0, 0, 0, 0, 0, 8.133987, -2.743165, 6.4668493, 0, 0, 0, 0, 0, 0, 6.7739983, -4.635585, 4.038424, 0, 0, 0, 0, 0, 0, 5.7515755, -3.9234614, 2.794408, 0, 0, 0, 0, 0, 0, 6.1539583, -1.8642044, 2.065085, 0, 0, 0, 0, 0, 0, 5.499841, -1.0722902, 1.2296886),
+"tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+}
+point_count = 64
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_4reak"]
+material = ExtResource("2_iuf2t")
+top_radius = 0.2
+bottom_radius = 0.2
+height = 0.6
+rings = 20
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_xo3ru"]
 size = Vector3(0.56691754, 4.5182676, 0.8336911)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_hp4bs"]
 size = Vector3(1.7179108, 4.6011353, 0.97314453)
 
-[node name="Player" type="Node3D" unique_id=719301295 node_paths=PackedStringArray("PlayerObject", "rigidBody", "CameraTransform", "UIController", "cameraScript", "deathVFX", "deathSFX", "shotgunSFX", "skybox", "InvulnerabilityTimer", "Shotgun", "Automatic", "Dash")]
+[node name="Player" type="Node3D" unique_id=719301295 node_paths=PackedStringArray("PlayerObject", "rigidBody", "CameraTransform", "UIController", "cameraScript", "deathVFX", "IdleAnimation", "deathSFX", "shotgunSFX", "skybox", "InvulnerabilityTimer", "Shotgun", "Automatic", "Dash")]
 script = ExtResource("1_xo3ru")
 PlayerObject = NodePath("PlayerRigidbody/PlayerMoveable")
 rigidBody = NodePath("PlayerRigidbody")
@@ -317,9 +451,10 @@ CameraTransform = NodePath("CameraTransform")
 UIController = NodePath("UI")
 cameraScript = NodePath("PlayerCam")
 deathVFX = NodePath("PlayerRigidbody/PlayerMoveable/Effects/Explosion")
+IdleAnimation = NodePath("PlayerRigidbody/PlayerMoveable/MattMachine/AnimationPlayer")
 deathSFX = NodePath("PlayerRigidbody/Audio/Death")
 shotgunSFX = NodePath("PlayerRigidbody/Audio/ShotgunSound")
-CameraOffset = Vector3(0, 10, 0)
+CameraOffset = Vector3(0, 7, 0)
 invulnerabilityPeriod = 2
 AccelerationMultiplier = 10.0
 MaxSpeed = 30.0
@@ -374,7 +509,7 @@ process_material = SubResource("ParticleProcessMaterial_bup7g")
 draw_pass_1 = SubResource("ArrayMesh_g2vtq")
 
 [node name="Shoot" type="GPUParticles3D" parent="PlayerRigidbody/PlayerMoveable/Effects" unique_id=295065108]
-transform = Transform3D(0.99999976, 0, 0, 0, 0.99999976, 0, 0, 7.1054274e-15, 0.99999976, 0, 0.9118971, -8.5738485e-08)
+transform = Transform3D(0.99999964, 0, 0, 0, 0.99999964, -1.7763568e-15, 0, 0, 0.99999964, -0.8168243, 0.55849624, -5.251101e-08)
 emitting = false
 amount = 40
 lifetime = 0.3
@@ -408,6 +543,18 @@ randomness = 0.45
 fixed_fps = 60
 process_material = SubResource("ParticleProcessMaterial_iuf2t")
 draw_pass_1 = SubResource("SphereMesh_kk4ol")
+
+[node name="ShootB" type="GPUParticles3D" parent="PlayerRigidbody/PlayerMoveable/Effects" unique_id=429139797]
+transform = Transform3D(0.9999991, 0, 0, 0, 0.9999991, -3.5527137e-15, 0, -7.1054274e-15, 0.99999905, 0.8524456, 0.5597152, -5.2625676e-08)
+emitting = false
+amount = 40
+lifetime = 0.3
+explosiveness = 0.9
+randomness = 0.44
+fixed_fps = 80
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_fvtld")
+draw_pass_1 = SubResource("BoxMesh_ct4mp")
 
 [node name="Casters" type="Node3D" parent="PlayerRigidbody/PlayerMoveable" unique_id=1177968342]
 transform = Transform3D(0.99999994, 0, 0, 0, 0.99999994, 0, 0, 0, 0.99999994, 0, 0, 0)
@@ -450,20 +597,49 @@ transform = Transform3D(1.0575721, 0.117786415, -0.27868706, -0.2958176, 0.61519
 mesh = ExtResource("7_j4wxg")
 surface_material_override/0 = SubResource("ShaderMaterial_jrjdb")
 
-[node name="Vein" type="MeshInstance3D" parent="PlayerRigidbody/PlayerMoveable/MattMachine" unique_id=1915800118]
-transform = Transform3D(0.99999994, 0, 0, 0, 0.99999994, -3.5527137e-15, 0, 0, 0.99999994, 0, 0, 0)
-mesh = ExtResource("10_v4iqv")
+[node name="LeftWing" type="MeshInstance3D" parent="PlayerRigidbody/PlayerMoveable/MattMachine" unique_id=896075405]
+mesh = SubResource("ArrayMesh_v4iqv")
 surface_material_override/0 = SubResource("ShaderMaterial_iuf2t")
 
-[node name="LeftWing" type="MeshInstance3D" parent="PlayerRigidbody/PlayerMoveable/MattMachine" unique_id=896075405]
-transform = Transform3D(0.99999994, 0, 0, 0, 0.99999994, -3.5527137e-15, 0, 0, 0.99999994, 0.13506179, 0, 0)
-mesh = SubResource("ArrayMesh_v4iqv")
-surface_material_override/0 = ExtResource("5_bup7g")
-
 [node name="RightWing" type="MeshInstance3D" parent="PlayerRigidbody/PlayerMoveable/MattMachine" unique_id=354489087]
-transform = Transform3D(0.99999994, 0, 0, 0, 0.99999994, -3.5527137e-15, 0, 0, 0.99999994, 0, 0, 0)
 mesh = ExtResource("12_42h83")
 surface_material_override/0 = ExtResource("5_bup7g")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="PlayerRigidbody/PlayerMoveable/MattMachine" unique_id=1620971209]
+reset_on_save = false
+root_node = NodePath("../../../..")
+libraries/ = SubResource("AnimationLibrary_kk4ol")
+playback_auto_capture_transition_type = 1
+playback_default_blend_time = 0.25
+
+[node name="VeinPath" type="Path3D" parent="PlayerRigidbody/PlayerMoveable/MattMachine" unique_id=1587564671]
+transform = Transform3D(0.9999996, 0, 0, 0, 0.9999999, -1.7763568e-15, 0, 0, 0.9999998, -2.7575839, 3.2439716, -3.4195395)
+curve = SubResource("Curve3D_jrjdb")
+
+[node name="PathFollow3D" type="PathFollow3D" parent="PlayerRigidbody/PlayerMoveable/MattMachine" unique_id=841381545]
+transform = Transform3D(0.018300017, 0.3450381, 0.9383696, 0.3450375, 0.8786843, -0.3298226, -0.93836504, 0.32982177, -0.10297586, 0.27654916, -0.0059925294, -3.4098406)
+progress = 0.1
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="PlayerRigidbody/PlayerMoveable/MattMachine/PathFollow3D" unique_id=2112371001]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0)
+mesh = SubResource("CylinderMesh_4reak")
+script = ExtResource("12_iuf2t")
+
+[node name="CSGPolygon3D" type="CSGPolygon3D" parent="PlayerRigidbody/PlayerMoveable/MattMachine" unique_id=333713582]
+transform = Transform3D(0.99999887, 0, 0, 0, 0.9999999, -1.7763568e-15, 0, 0, 0.9999998, -2.912481, 2.6259623, -3.1624556)
+polygon = PackedVector2Array(0.33674455, 0.3828354, 0.29158664, 0.6403651, 0.61321163, 0.537014, 0.5998633, 0.3446579)
+mode = 2
+path_node = NodePath("../VeinPath")
+path_interval_type = 1
+path_interval = 1.0
+path_simplify_angle = 0.0
+path_rotation = 2
+path_rotation_accurate = false
+path_local = true
+path_continuous_u = false
+path_u_distance = 1.0
+path_joined = false
+material = ExtResource("2_iuf2t")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="PlayerRigidbody" unique_id=814760578]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.03308274, 0.17040539, -0.04167366)
@@ -525,9 +701,10 @@ autostart = true
 
 [node name="Weapons" type="Node" parent="." unique_id=1777134565]
 
-[node name="Automatic" type="Node" parent="Weapons" unique_id=1246623729 node_paths=PackedStringArray("ShootingParticles", "ShootAudioStream", "ReloadTimer", "RaycasterObject")]
+[node name="Automatic" type="Node" parent="Weapons" unique_id=1246623729 node_paths=PackedStringArray("ShootingParticleA", "ShootingParticleB", "ShootAudioStream", "ReloadTimer", "RaycasterObject")]
 script = ExtResource("5_2fvbb")
-ShootingParticles = NodePath("../../PlayerRigidbody/PlayerMoveable/Effects/Shoot")
+ShootingParticleA = NodePath("../../PlayerRigidbody/PlayerMoveable/Effects/Shoot")
+ShootingParticleB = NodePath("../../PlayerRigidbody/PlayerMoveable/Effects/ShootB")
 ShootAudioStream = NodePath("../../PlayerRigidbody/Audio/ShootSound")
 ReloadTimer = NodePath("ReloadTimer")
 RaycasterObject = NodePath("../../PlayerRigidbody/PlayerMoveable/Casters/RayCast3D")
@@ -540,9 +717,9 @@ wait_time = 0.1
 one_shot = true
 autostart = true
 
-[node name="Shotgun" type="Node" parent="Weapons" unique_id=3338134 node_paths=PackedStringArray("ShootingParticles", "ShootAudioStream", "ReloadTimer", "RaycasterObject")]
+[node name="Shotgun" type="Node" parent="Weapons" unique_id=3338134 node_paths=PackedStringArray("ShootingParticleA", "ShootAudioStream", "ReloadTimer", "RaycasterObject")]
 script = ExtResource("5_2fvbb")
-ShootingParticles = NodePath("../../PlayerRigidbody/PlayerMoveable/Effects/ShutgunVFX")
+ShootingParticleA = NodePath("../../PlayerRigidbody/PlayerMoveable/Effects/ShutgunVFX")
 ShootAudioStream = NodePath("../../PlayerRigidbody/Audio/ShotgunSound")
 ReloadTimer = NodePath("ShotgunReloadTimer")
 RaycasterObject = NodePath("../../PlayerRigidbody/PlayerMoveable/Casters/ShotgunShapecast")
@@ -554,9 +731,9 @@ HitPoints = 200.0
 one_shot = true
 autostart = true
 
-[node name="Dash" type="Node" parent="Weapons" unique_id=1137458982 node_paths=PackedStringArray("ShootingParticles", "ShootAudioStream", "ReloadTimer", "RaycasterObject")]
+[node name="Dash" type="Node" parent="Weapons" unique_id=1137458982 node_paths=PackedStringArray("ShootingParticleA", "ShootAudioStream", "ReloadTimer", "RaycasterObject")]
 script = ExtResource("5_2fvbb")
-ShootingParticles = NodePath("../../PlayerRigidbody/PlayerMoveable/Effects/Dash")
+ShootingParticleA = NodePath("../../PlayerRigidbody/PlayerMoveable/Effects/Dash")
 ShootAudioStream = NodePath("../../PlayerRigidbody/Audio/DashSound")
 ReloadTimer = NodePath("ReloadTimer")
 RaycasterObject = NodePath("../../PlayerRigidbody/PlayerMoveable/Casters/Dash")

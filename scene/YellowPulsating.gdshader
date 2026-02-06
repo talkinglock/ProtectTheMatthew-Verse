@@ -1,6 +1,7 @@
 shader_type spatial;
 
 uniform vec3 baseColor = vec3(0.7,0.7,0.1);
+const vec3 posOffset = vec3(0.0,0.0,0.0);
 const float pulsationAmplitude = 2.0f;
 
 varying vec3 VertexPosition;
@@ -157,8 +158,9 @@ float noise(vec2 x) {
 
 void vertex() {
 	// Called for every vertex the material is visible on.
-	vec3 towardCenter = normalize(-VERTEX);
-	float noiseValue = noise4D(vec4(VERTEX.xyz, TIME))/0.8f;
+	vec3 vertexAdjusted = VERTEX - vec3(-2.758f, 3.244f, -3.42f);
+	vec3 towardCenter = normalize(-vertexAdjusted);
+	float noiseValue = noise4D(vec4(vertexAdjusted.xyz, TIME))/2.8f;
 	VertexPosition = VERTEX;
 	VERTEX += towardCenter * noiseValue;
 }

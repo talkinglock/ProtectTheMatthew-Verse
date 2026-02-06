@@ -62,7 +62,8 @@ public partial class WeaponsHandler : Node3D
 			weapon.ShootAudioStream.Playing = false;
 			weapon.ShootAudioStream.Playing = true;
 
-			weapon.ShootingParticles.Restart();
+			weapon.ShootingParticleA.Restart();
+			if (weapon.ShootingParticleB != null) {weapon.ShootingParticleB.Restart();}
 		}
 		else
 		{
@@ -70,7 +71,8 @@ public partial class WeaponsHandler : Node3D
 			{
 				weapon.ShootAudioStream.Playing = true;
 			}
-			weapon.ShootingParticles.Emitting = true;
+			weapon.ShootingParticleA.Emitting = true;
+			if (weapon.ShootingParticleB != null) {weapon.ShootingParticleB.Emitting = true;}
 		}
 
 
@@ -119,7 +121,8 @@ public partial class WeaponsHandler : Node3D
 	}
 	public void UnfireWeapon(Weapon weapon)
 	{
-		weapon.ShootingParticles.Emitting = false;
+		weapon.ShootingParticleA.Emitting = false;
+		if (weapon.ShootingParticleB != null) {weapon.ShootingParticleB.Emitting = false;}
 		weapon.ShootAudioStream.Playing = false;
 	}
 

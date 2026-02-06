@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://k86aoimc06ce"]
 
-[ext_resource type="Script" uid="uid://dmuxojw6ksulp" path="res://Skybox.cs" id="1_mua6v"]
-[ext_resource type="Shader" uid="uid://dw5su8j37x7e0" path="res://skybox.gdshader" id="1_si1ts"]
-[ext_resource type="Script" uid="uid://bpbarsv5lud0e" path="res://ShaderHandler.cs" id="3_bob2p"]
+[ext_resource type="Script" uid="uid://dmuxojw6ksulp" path="res://scripts/Skybox.cs" id="1_mua6v"]
+[ext_resource type="Shader" uid="uid://dw5su8j37x7e0" path="res://shaders/skybox.gdshader" id="1_si1ts"]
+[ext_resource type="Script" uid="uid://bpbarsv5lud0e" path="res://scripts/ShaderHandler.cs" id="3_bob2p"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_mua6v"]
 render_priority = 0

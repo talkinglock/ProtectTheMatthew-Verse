@@ -25,6 +25,7 @@ public partial class PlayerController : Node3D
 
 	[ExportGroup("VFX")]
 	[Export] public GpuParticles3D deathVFX;
+	[Export] public AnimationPlayer IdleAnimation;
 
 	[ExportGroup("Audio")]
 	[Export] public AudioStreamPlayer3D deathSFX;
@@ -43,6 +44,11 @@ public partial class PlayerController : Node3D
 	[ExportGroup("Misc Objects")]
 	[Export] public Skybox skybox;
 	[Export] public Timer InvulnerabilityTimer;
+	/*[Export] public Path3D VeinPath;
+	[Export] public PathFollow3D VeinFollower;
+	[Export] public float InterVeinDistance;
+	[Export] public ShaderMaterial VeinShaderMaterial;
+	*/
 	[ExportGroup("Combat")]
 	[Export] public Weapon Shotgun;
 	[Export] public Weapon Automatic;
@@ -111,7 +117,7 @@ public partial class PlayerController : Node3D
 		); 
 
 		Debug.WriteLine(mousePosShipRelative3);
-		CameraTransform.Position = rigidBody.Position + CameraOffset + mousePosShipRelative3;
+		CameraTransform.Position = PlayerObject.GlobalPosition + CameraOffset + mousePosShipRelative3;
 	}
 
 	void UpdateSkybox()
@@ -145,11 +151,16 @@ public partial class PlayerController : Node3D
 	{
 		if (Input.IsMouseButtonPressed(MouseButton.Left))
 		{
-			weaponsHandler.TryFire(Automatic);
+			if (weaponsHandler.CanFire(Automatic))
+			{
+				IdleAnimation.PlayWithCapture("Auto");
+				weaponsHandler.TryFire(Automatic);
+			}
 		}
 		else
 		{
 			weaponsHandler.UnfireWeapon(Automatic);
+			IdleAnimation.PlayWithCapture("new_animation");
 		}
 
 		if (Input.IsKeyPressed(Key.Space) && weaponsHandler.CanFire(Dash))
@@ -226,12 +237,14 @@ public partial class PlayerController : Node3D
 		UpdateDeath();
 		if (!alive) {return;}
 		UpdateUI();
+		
 		UpdateCombat(delta);
 		UpdateRotation();
 		UpdateCamera();
 	}
 	public override void _Ready()
 	{
+
 		weaponsHandler = new WeaponsHandler();
 		shipManager = new ShipManager();
 
@@ -243,6 +256,9 @@ public partial class PlayerController : Node3D
 		shipManager.SetRigidbody(rigidBody);
 		shipManager.SetPlayerStructure(PlayerObject);
 		shipManager.SetMovementParameters(AccelerationMultiplier, MaxSpeed, FRICTION);
+
+		IdleAnimation.PlayWithCapture("new_animation");
+
 		alive = true;
 	}
 }
